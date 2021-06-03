@@ -3,14 +3,55 @@ body {
   /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif; */
-  font-family: "Gilroy-Light";
+  font-family: "Gilroy";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 @font-face {
-  font-family: "Gilroy-Light";
-  src: local("Gilroy-Light"), url("./fonts/Gilroy-Light.otf") format("truetype");
-  font-weight: normal;
+  font-family: "Gilroy";
+  src: local("Gilroy-Light"), url("./fonts/Gilroy-Light.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 200;
+}
+@font-face {
+  font-family: "Gilroy";
+  src: local("Gilroy-Regular"),
+    url("./fonts/Gilroy-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+}
+@font-face {
+  font-family: "Gilroy";
+  src: local("Gilroy-Medium"),
+    url("./fonts/Gilroy-Medium.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 500;
+}
+@font-face {
+  font-family: "Gilroy";
+  src: local("Gilroy-SemiBold"),
+    url("./fonts/Gilroy-SemiBold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 600;
+}
+@font-face {
+  font-family: "Gilroy";
+  src: local("Gilroy-Bold"), url("./fonts/Gilroy-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 700;
+}
+@font-face {
+  font-family: "Gilroy";
+  src: local("Gilroy-ExtraBold"),
+    url("./fonts/Gilroy-ExtraBold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 800;
+}
+@font-face {
+  font-family: "Gilroy";
+  src: local("Gilroy-Heavy"), url("./fonts/Gilroy-Heavy.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 900;
 }
 
 code {
