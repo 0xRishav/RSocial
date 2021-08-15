@@ -1,12 +1,47 @@
 import { Input } from "../styles/Input.styles";
-import { Button, Logo } from "../components";
+import { Button, Logo, FlexBox } from "../components";
 import styled from "styled-components";
 import { NavDiv } from "./Landing";
 import { StyledButton } from "../components/Button";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { AiOutlineVideoCameraAdd } from "react-icons/ai";
+import { FcImageFile } from "react-icons/fc";
+import { useState } from "react";
+import {
+  uploadProfilePicture,
+  uploadCoverPicture,
+} from "../features/user/UserSlice";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router";
 
 const UploadPhoto = ({ photoType }) => {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const [fileState, setFileState] = useState(null);
+  const [file, setFile] = useState(null);
+  const handleFileChange = (event) => {
+    setFileState(URL.createObjectURL(event.target.files[0]));
+    setFile(event.target.files[0]);
+  };
+
+  const handleNext = async () => {
+    if (fileState === null) {
+      return;
+    }
+    if (photoType === "Profile") {
+      const response = await dispatch(uploadProfilePicture(file));
+      console.log(response);
+      if (response.meta.requestStatus === "fulfilled") {
+        history.push("/upload-photo/cover");
+      }
+    } else {
+      const response = await dispatch(uploadCoverPicture(file));
+      if (response.meta.requestStatus === "fulfilled") {
+        history.push("/feed");
+      }
+    }
+  };
+
   return (
     <div>
       <NavDiv>
@@ -15,24 +50,60 @@ const UploadPhoto = ({ photoType }) => {
       </NavDiv>
       <h2>Add {photoType} Picture</h2>
 
-      <CameraDiv>
+      {/* <CameraDiv>
         <AiOutlineVideoCameraAdd />
-      </CameraDiv>
+      </CameraDiv> */}
+      {fileState === null ? (
+        <FlexBox
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <FcImageFile size="60" />
+          <FileInput
+            id="fileInput"
+            type="file"
+            name="image"
+            onChange={handleFileChange}
+            enctype="multipart/form-data"
+            // value={fileState}
+          />
 
-      <StyledButton primary style={{ width: "100%", marginTop: "1rem" }}>
+          <SelectFileLabel for="fileInput">Select file</SelectFileLabel>
+        </FlexBox>
+      ) : (
+        <UploadedImage src={fileState} />
+      )}
+
+      <StyledButton
+        onClick={handleNext}
+        primary
+        style={{ width: "100%", marginTop: "1rem" }}
+      >
         Next <AiOutlineArrowRight style={{ marginLeft: "0.5rem" }} />
       </StyledButton>
     </div>
   );
 };
 
-const CameraDiv = styled.div`
-  height: 1rem;
-  width: 1rem;
-  border: 1px solid black;
-  padding: 1rem;
-  border-radius: 2rem;
-  margin: auto;
+const FileInput = styled.input`
+  color: transparent;
+  display: none;
+`;
+
+const SelectFileLabel = styled.label`
+  padding: 0.6rem 1rem;
+  background: #7c37a6;
+  color: white;
+  margin-top: 1rem;
+  border-radius: 0.5rem;
+`;
+
+
+const UploadedImage = styled.img`
+  height: auto;
+  width: 100%;
+  object-fit: cover;
 `;
 
 export default UploadPhoto;
