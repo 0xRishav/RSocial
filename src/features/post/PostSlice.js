@@ -1,0 +1,223 @@
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { postApi } from "./PostAPI";
+
+const initialState = {
+  feed: [],
+  userPosts: [],
+  post: {},
+  photoUrl: "",
+  photoPublicId: "",
+  loading: false,
+  error: "",
+};
+
+export const uploadPostPhoto = createAsyncThunk(
+  "post/uploadPostPhoto",
+  async (file) => {
+    try {
+      const formData = new FormData();
+      formData.append("image", file, file.name);
+      const response = await postApi.uploadPostPicture(formData);
+      if (response.status === 200) {
+        return {
+          url: response.data.data.url,
+          public_id: response.data.data.public_id,
+        };
+      }
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  }
+);
+
+export const createPost = createAsyncThunk("post/createPost", async (body) => {
+  try {
+    const response = await postApi.createPost(body);
+    if (response.status === 200) {
+      return {
+        post: response.data.post,
+      };
+    }
+  } catch (error) {
+    return {
+      error,
+    };
+  }
+});
+
+export const fetchAllPosts = createAsyncThunk(
+  "post/fetchAllPosts",
+  async () => {
+    try {
+      const response = await postApi.fetchALlPosts();
+      console.log("FEEDD RESPONSWE", response);
+      if (response.status === 200) {
+        return {
+          feed: response.data.data.posts,
+        };
+      }
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  }
+);
+
+export const fetchUserPosts = createAsyncThunk(
+  "post/fetchUserPosts",
+  async () => {
+    try {
+      const response = await postApi.fetchUserPosts();
+      console.log("FEEDD RESPONSWE", response);
+      if (response.status === 200) {
+        return {
+          feed: response.data.data.posts,
+        };
+      }
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  }
+);
+export const fetchPost = createAsyncThunk("post/fetchPost", async (body) => {
+  try {
+    const response = await postApi.fetchPost(body);
+    if (response.status === 200) {
+      return {
+        post: response.data.data.post,
+      };
+    }
+  } catch (error) {
+    return {
+      error,
+    };
+  }
+});
+export const likeDislikePost = createAsyncThunk(
+  "post/likeDislikePost",
+  async (body) => {
+    try {
+      const response = await postApi.likeDislikePost(body);
+      if (response.status === 200) {
+        return {
+          post: response.data.data.post,
+        };
+      }
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  }
+);
+export const createComment = createAsyncThunk(
+  "post/createComment",
+  async (body) => {
+    try {
+      const response = await postApi.createComment(body);
+      if (response.status === 200) {
+        return {
+          post: response.data.data.newPost,
+        };
+      }
+    } catch (error) {
+      return {
+        error,
+      };
+    }
+  }
+);
+
+export const postSlice = createSlice({
+  name: "post",
+  initialState,
+  reducers: {},
+  extraReducers: {
+    [uploadPostPhoto.fulfilled]: (state, { payload }) => {
+      state.photoUrl = payload.photoUrl;
+      state.photoPublicId = payload.public_id;
+      state.loading = false;
+    },
+    [uploadPostPhoto.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload.error;
+    },
+    [uploadPostPhoto.pending]: (state, { payload }) => {
+      state.loading = true;
+    },
+    [createPost.fulfilled]: (state, { payload }) => {
+      state.post = payload.post;
+      state.loading = false;
+    },
+    [createPost.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload.error;
+    },
+    [createPost.pending]: (state, { payload }) => {
+      state.loading = true;
+    },
+
+    [fetchAllPosts.fulfilled]: (state, { payload }) => {
+      state.feed = payload.feed;
+      state.loading = false;
+    },
+    [fetchAllPosts.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload.error;
+    },
+    [fetchAllPosts.pending]: (state, { payload }) => {
+      state.loading = true;
+    },
+    [fetchUserPosts.fulfilled]: (state, { payload }) => {
+      state.userPosts = payload.feed;
+      state.loading = false;
+    },
+    [fetchUserPosts.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload.error;
+    },
+    [fetchUserPosts.pending]: (state, { payload }) => {
+      state.loading = true;
+    },
+    [fetchPost.fulfilled]: (state, { payload }) => {
+      state.post = payload.post;
+      state.loading = false;
+    },
+    [fetchPost.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload.error;
+    },
+    [fetchPost.pending]: (state, { payload }) => {
+      state.loading = true;
+    },
+    [likeDislikePost.fulfilled]: (state, { payload }) => {
+      state.post = payload.post;
+      state.loading = false;
+    },
+    [likeDislikePost.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload.error;
+    },
+    [likeDislikePost.pending]: (state, { payload }) => {
+      state.loading = true;
+    },
+    [createComment.fulfilled]: (state, { payload }) => {
+      state.post = payload.post;
+      state.loading = false;
+    },
+    [createComment.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload.error;
+    },
+    [createComment.pending]: (state, { payload }) => {
+      state.loading = true;
+    },
+  },
+});
+
+export default postSlice.reducer;
