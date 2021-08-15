@@ -3,3 +3,8 @@ export { default as Signin } from "./Signin";
 export { default as Signup } from "./Signup";
 export { default as UploadPhoto } from "./UploadPhoto";
 export { default as Feed } from "./Feed";
+export { default as PostPage } from "./PostPage";
+export { default as Search } from "./Search";
+export { default as CreatePost } from "./CreatePost";
+export { default as Notifications } from "./Notifications";
+export { default as Profile } from "./Profile";
