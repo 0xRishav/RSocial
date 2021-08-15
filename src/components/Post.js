@@ -1,55 +1,84 @@
 import { Avatar } from ".";
+import { useState } from "react";
 import { HiOutlineDotsCircleHorizontal } from "react-icons/hi";
 import { AiFillHeart } from "react-icons/ai";
 import { AiOutlineHeart } from "react-icons/ai";
 import { TiArrowForwardOutline } from "react-icons/ti";
 import { RiChat3Line } from "react-icons/ri";
+import { AiFillCloseCircle } from "react-icons/ai";
+import Modal from "react-modal";
+import { Link } from "react-router-dom";
 
 import styled from "styled-components";
+import Likes from "./Likes";
 
-const Post = ({
-  username,
-  location,
-  caption,
-  photo,
-  profilePic,
-  likes,
-  comments,
-}) => {
-  console.log(likes);
+const Post = ({ user, caption, likes, comments, photoUrl, _id }) => {
+  console.log(user);
+  const [isLikeModalOpen, setIsLikeModalOpen] = useState(false);
+
+  const location = { path: "/feed/post", state: { postId: _id } };
+
+  const handleLikeModal = (action) => {
+    action === "open" ? setIsLikeModalOpen(true) : setIsLikeModalOpen(false);
+  };
+  const likePost = () => {};
   return (
     <div>
+      <Modal
+        isOpen={isLikeModalOpen}
+        // onAfterOpen={afterOpenModal}
+        onRequestClose={() => handleLikeModal("open")}
+        style={{ position: "relative" }}
+        contentLabel="Post Likes"
+      >
+        <AiFillCloseCircle
+          onClick={() => handleLikeModal("close")}
+          size="25"
+          style={{
+            position: "absolute",
+            right: "1rem",
+            top: "1rem",
+            marginBottom: "1rem",
+            cursor: "pointer",
+          }}
+        />
+        <Likes />
+      </Modal>
       <HorizonatalDivider />
       <NameOptionWrapper>
         <NameOptionWrapper>
-          <Avatar src={profilePic} size="2rem" />
+          <Avatar src={user?.profilePicture} size="2rem" />
           <AuthorInfoWrapper style={{ marginLeft: "1rem" }}>
             <div style={{ fontWeight: "bold" }}>Rishav Bharti</div>
-            <div style={{ fontSize: "0.8rem" }}>{location}</div>
+            <div style={{ fontSize: "0.8rem" }}>India</div>
           </AuthorInfoWrapper>
         </NameOptionWrapper>
 
-        <HiOutlineDotsCircleHorizontal size="25" />
+        <HiOutlineDotsCircleHorizontal size="20" />
       </NameOptionWrapper>
-      {photo && <PostImg src={photo} />}
+      {photoUrl && <PostImg src={photoUrl} />}
       <p style={{ textAlign: "left" }}>
         <span style={{ fontWeight: "bold", marginRight: "0.5rem" }}>
-          {username}
+          {user?.username}
         </span>
         {caption}
       </p>
       <ReactiontWrapper>
         <ReactiontItemWrapper>
-          <AiOutlineHeart style={{ marginRight: "0.5rem" }} size={25} />
-          <div>{likes}</div>
+          <AiOutlineHeart style={{ marginRight: "0.5rem" }} size={20} />
+          <div onClick={likePost} style={{ cursor: "pointer" }}>
+            {likes?.length}
+          </div>
         </ReactiontItemWrapper>
         <ReactiontItemWrapper>
-          <RiChat3Line style={{ marginRight: "0.5rem" }} size={25} />
-          <div>{comments.length}</div>
+          <Link to="/post-page" params={{ postId: _id }}>
+            <RiChat3Line style={{ marginRight: "0.5rem" }} size={20} />
+            <div>{comments?.length}</div>
+          </Link>
         </ReactiontItemWrapper>
-        <ReactiontItemWrapper>
+        {/* <ReactiontItemWrapper>
           <TiArrowForwardOutline style={{ marginRight: "0.5rem" }} size={25} />
-        </ReactiontItemWrapper>
+        </ReactiontItemWrapper> */}
       </ReactiontWrapper>
     </div>
   );
