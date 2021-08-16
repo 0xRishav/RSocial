@@ -23,10 +23,10 @@ const Landing = () => {
             RSocial allows users to upload photos through RSocial website. Users
             can add a caption to each of their posts.
           </p>
-          <Link>
+          <Link to="/signin">
             <Button primary={true} text="Sign In" width="100%" />
           </Link>
-          <Link style={{ marginLeft: "1rem" }}>
+          <Link style={{ marginLeft: "1rem" }} to="/signup">
             <Button primary={false} text="Sign Up" width="100%" />
           </Link>
         </Left>
