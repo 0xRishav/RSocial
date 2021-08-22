@@ -1,15 +1,15 @@
 import axios from "axios";
 
 const baseUrl =
-  "http://ec2-3-14-143-74.us-east-2.compute.amazonaws.com:3000/post";
-// "http://localhost:4000/post";
+  // "http://ec2-3-14-143-74.us-east-2.compute.amazonaws.com:3000/post";
+  "http://localhost:4000/post";
 
 export const postApi = {
   uploadPostPicture: async (formData) => {
     return axios.post(`${baseUrl}/upload-photo`, formData);
   },
   fetchPost: async (body) => {
-    return axios.get(`${baseUrl}/upload-photo`, body);
+    return axios.post(`${baseUrl}/fetch-post`, body);
   },
   createComment: async (body) => {
     return axios.post(`${baseUrl}/create-comment`, body);

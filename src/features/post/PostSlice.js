@@ -5,6 +5,7 @@ const initialState = {
   feed: [],
   userPosts: [],
   post: {},
+  isPostLiked: null,
   photoUrl: "",
   photoPublicId: "",
   loading: false,
@@ -87,12 +88,16 @@ export const fetchUserPosts = createAsyncThunk(
 export const fetchPost = createAsyncThunk("post/fetchPost", async (body) => {
   try {
     const response = await postApi.fetchPost(body);
+    console.log("fetchPostResponse", response);
     if (response.status === 200) {
+      console.log("fetchPostRES", response);
       return {
-        post: response.data.data.post,
+        post: response.data.data.populatedPost,
+        isPostLiked: response.data.data.isPostLiked,
       };
     }
   } catch (error) {
+    console.log("FETCH_POST_ERROR", error);
     return {
       error,
     };
@@ -103,9 +108,11 @@ export const likeDislikePost = createAsyncThunk(
   async (body) => {
     try {
       const response = await postApi.likeDislikePost(body);
+      console.log("likeDislikePost", response.data.data);
       if (response.status === 200) {
         return {
           post: response.data.data.post,
+          isPostLiked: response.data.data.isPostLiked,
         };
       }
     } catch (error) {
@@ -120,9 +127,11 @@ export const createComment = createAsyncThunk(
   async (body) => {
     try {
       const response = await postApi.createComment(body);
+      console.log("Create_comment-res", response);
       if (response.status === 200) {
         return {
-          post: response.data.data.newPost,
+          newPost: response.data.data.newPost,
+          newComments: response.data.data.comments,
         };
       }
     } catch (error) {
@@ -186,6 +195,7 @@ export const postSlice = createSlice({
     },
     [fetchPost.fulfilled]: (state, { payload }) => {
       state.post = payload.post;
+      state.isPostLiked = payload.isPostLiked;
       state.loading = false;
     },
     [fetchPost.rejected]: (state, { payload }) => {
@@ -197,6 +207,7 @@ export const postSlice = createSlice({
     },
     [likeDislikePost.fulfilled]: (state, { payload }) => {
       state.post = payload.post;
+      state.isPostLiked = payload.isPostLiked;
       state.loading = false;
     },
     [likeDislikePost.rejected]: (state, { payload }) => {
@@ -207,7 +218,7 @@ export const postSlice = createSlice({
       state.loading = true;
     },
     [createComment.fulfilled]: (state, { payload }) => {
-      state.post = payload.post;
+      state.post.comments = payload.newComments;
       state.loading = false;
     },
     [createComment.rejected]: (state, { payload }) => {
