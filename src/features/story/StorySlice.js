@@ -18,6 +18,7 @@ export const createStory = createAsyncThunk(
       formData.append("image", file, file.name);
       console.log("FormData from slice", formData);
       const response = await storyApi.createStory(formData);
+      console.log("CREATE_STORY_RES", response);
       if (response.status === 200) {
         return {
           story: response.data.data.story,
