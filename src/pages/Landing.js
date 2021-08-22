@@ -7,33 +7,38 @@ import { Link } from "react-router-dom";
 const Landing = () => {
   return (
     <div>
-      <NavDiv>
-        <Logo />
-        <Link>
-          <Button primary={true} text="Sign In" />
-        </Link>
-      </NavDiv>
-      <TwoColumnFlexWrapper>
-        <Left>
-          <h1>
-            Define<span style={{ color: "#7C37A6" }}> Yourself</span> . The Way
-            You <span style={{ color: "#7C37A6" }}>Want</span>.
-          </h1>
-          <p>
-            RSocial allows users to upload photos through RSocial website. Users
-            can add a caption to each of their posts.
-          </p>
-          <Link to="/signin">
-            <Button primary={true} text="Sign In" width="100%" />
+      <LandingPageWrapper>
+        <NavDiv>
+          <Logo />
+          <Link>
+            <Button primary={true} text="Sign In" />
           </Link>
-          <Link style={{ marginLeft: "1rem" }} to="/signup">
-            <Button primary={false} text="Sign Up" width="100%" />
-          </Link>
-        </Left>
-        <Right>
-          <LandingSvg src={LandingPageSvg2} className="Tilt-inner"></LandingSvg>
-        </Right>
-      </TwoColumnFlexWrapper>
+        </NavDiv>
+        <TwoColumnFlexWrapper>
+          <Left>
+            <h1>
+              Define<span style={{ color: "#7C37A6" }}> Yourself</span> . The
+              Way You <span style={{ color: "#7C37A6" }}>Want</span>.
+            </h1>
+            <p>
+              RSocial allows users to upload photos through RSocial website.
+              Users can add a caption to each of their posts.
+            </p>
+            <Link to="/signin">
+              <Button primary={true} text="Sign In" width="100%" />
+            </Link>
+            <Link style={{ marginLeft: "1rem" }} to="/signup">
+              <Button primary={false} text="Sign Up" width="100%" />
+            </Link>
+          </Left>
+          <Right>
+            <LandingSvg
+              src={LandingPageSvg2}
+              className="Tilt-inner"
+            ></LandingSvg>
+          </Right>
+        </TwoColumnFlexWrapper>
+      </LandingPageWrapper>
     </div>
   );
 };
@@ -71,6 +76,10 @@ const Right = styled.div`
   @media (min-width: 680px) {
     width: 50%;
   }
+`;
+const LandingPageWrapper = styled.div`
+  width: 90%;
+  margin: auto;
 `;
 
 export default Landing;

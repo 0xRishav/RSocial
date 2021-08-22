@@ -35,17 +35,15 @@ function App() {
   }, []);
   const { accessToken } = useSelector((state) => state.user);
 
-
   return (
     <div className="App">
       <Switch>
         <Route exact path="/profile/:userId" component={Profile} />
         <PrivateRoute exact path="/post-page/:postId" component={PostPage} />
+        <Route exact path="/">
+          {accessToken ? <Redirect to="/feed" /> : <Landing />}
+        </Route>
         <AppWrapper>
-          <Route exact path="/">
-            {accessToken ? <Redirect to="/feed" /> : <Landing />}
-          </Route>
-
           <Route exact path="/signup">
             {accessToken ? <Redirect to="/feed" /> : <Signup />}
           </Route>
