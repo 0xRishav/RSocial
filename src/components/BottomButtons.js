@@ -4,17 +4,22 @@ import { RiSearch2Fill } from "react-icons/ri";
 import { RiSearch2Line } from "react-icons/ri";
 import { AiFillNotification } from "react-icons/ai";
 import { AiOutlineNotification } from "react-icons/ai";
+import { IoIosCompass } from "react-icons/io";
 import { RiUser3Line } from "react-icons/ri";
 import { RiUser3Fill } from "react-icons/ri";
 import { RiAddBoxLine } from "react-icons/ri";
 import { RiAddBoxFill } from "react-icons/ri";
+import { ImCompass2 } from "react-icons/im";
 import FlexBox from "./FlexBox";
+import { StyledLink } from ".";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
 
 const BottomButtons = () => {
   const [selectedButton, setSelectedButton] = useState("Home");
+  const { user } = useSelector((state) => state.user);
   const buttonClickHandler = (button) => {
     setSelectedButton(button);
   };
@@ -51,19 +56,13 @@ const BottomButtons = () => {
     },
     {
       line: (
-        <AiOutlineNotification
-          size="28"
-          onClick={() => buttonClickHandler("notification")}
-        />
+        <ImCompass2 size="28" onClick={() => buttonClickHandler("explore")} />
       ),
       fill: (
-        <AiFillNotification
-          size="28"
-          onClick={() => buttonClickHandler("notification")}
-        />
+        <IoIosCompass size="28" onClick={() => buttonClickHandler("explore")} />
       ),
-      buttonName: "notification",
-      linkTo: "/notifications",
+      buttonName: "explore",
+      linkTo: "/explore",
     },
     {
       line: (
@@ -73,7 +72,7 @@ const BottomButtons = () => {
         <RiUser3Fill size="28" onClick={() => buttonClickHandler("user")} />
       ),
       buttonName: "user",
-      linkTo: "/profile",
+      linkTo: `/profile/${user._id}`,
     },
   ];
   return (
