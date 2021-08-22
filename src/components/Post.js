@@ -6,55 +6,79 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { TiArrowForwardOutline } from "react-icons/ti";
 import { RiChat3Line } from "react-icons/ri";
 import { AiFillCloseCircle } from "react-icons/ai";
+import { BsArrowRight } from "react-icons/bs";
 import Modal from "react-modal";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
-import Likes from "./Likes";
+import { unstable_renderSubtreeIntoContainer } from "react-dom";
+import { useEffect } from "react";
+import { likeDislikePost } from "../features/post/PostSlice";
+import StyledLink from "./StyledLink";
+import FlexBox from "./FlexBox";
+import { defaultProfilePicture } from "../utils/utils";
 
-const Post = ({ user, caption, likes, comments, photoUrl, _id }) => {
-  console.log(user);
-  const [isLikeModalOpen, setIsLikeModalOpen] = useState(false);
+const Post = ({
+  user,
+  caption,
+  likes,
+  comments,
+  photoUrl,
+  _id,
+  onHomePage,
+}) => {
+  const dispatch = useDispatch();
+  const postState = useSelector((state) => state.post);
+  // console.log(user);
 
-  const location = { path: "/feed/post", state: { postId: _id } };
+  // const [isLiked, setisLiked] = useState(false);
+  // console.log("likes", likes?.length);
+  // useEffect(() => {
+  //   const isLiked = checkIsLiked();
+  //   setisLiked(isLiked);
+  // }, [likes]);
 
-  const handleLikeModal = (action) => {
-    action === "open" ? setIsLikeModalOpen(true) : setIsLikeModalOpen(false);
+  console.log(postState.isPostLiked);
+
+  const filteredLikedArray = postState?.post?.likes?.filter(
+    (like) => like?.user?._id === user?._id
+  );
+  console.log("filteredLikedArray", postState.isPostLiked);
+
+  const handleLikeToggle = () => {
+    dispatch(likeDislikePost({ likeableId: _id, type: "Post" }));
   };
-  const likePost = () => {};
+
+  // function checkIsLiked() {
+  //   var i;
+  //   for (i = 0; i < likes.length; i++) {
+  //     if (likes[i] === user._id) {
+  //       return true;
+  //     }
+  //   }
+
+  //   return false;
+  // }
   return (
     <div>
-      <Modal
-        isOpen={isLikeModalOpen}
-        // onAfterOpen={afterOpenModal}
-        onRequestClose={() => handleLikeModal("open")}
-        style={{ position: "relative" }}
-        contentLabel="Post Likes"
-      >
-        <AiFillCloseCircle
-          onClick={() => handleLikeModal("close")}
-          size="25"
-          style={{
-            position: "absolute",
-            right: "1rem",
-            top: "1rem",
-            marginBottom: "1rem",
-            cursor: "pointer",
-          }}
-        />
-        <Likes />
-      </Modal>
+      {postState.loading && <h1>Loading</h1>}
       <HorizonatalDivider />
       <NameOptionWrapper>
         <NameOptionWrapper>
-          <Avatar src={user?.profilePicture} size="2rem" />
+          <Avatar
+            src={
+              user?.profilePicture
+                ? user?.profilePicture
+                : defaultProfilePicture
+            }
+            size="2rem"
+          />
           <AuthorInfoWrapper style={{ marginLeft: "1rem" }}>
             <div style={{ fontWeight: "bold" }}>Rishav Bharti</div>
             <div style={{ fontSize: "0.8rem" }}>India</div>
           </AuthorInfoWrapper>
         </NameOptionWrapper>
-
-        <HiOutlineDotsCircleHorizontal size="20" />
       </NameOptionWrapper>
       {photoUrl && <PostImg src={photoUrl} />}
       <p style={{ textAlign: "left" }}>
@@ -63,23 +87,53 @@ const Post = ({ user, caption, likes, comments, photoUrl, _id }) => {
         </span>
         {caption}
       </p>
-      <ReactiontWrapper>
-        <ReactiontItemWrapper>
-          <AiOutlineHeart style={{ marginRight: "0.5rem" }} size={20} />
-          <div onClick={likePost} style={{ cursor: "pointer" }}>
-            {likes?.length}
-          </div>
-        </ReactiontItemWrapper>
-        <ReactiontItemWrapper>
-          <Link to="/post-page" params={{ postId: _id }}>
+      {onHomePage ? (
+        <div>
+          <Link
+            to={`/post-page/${_id}`}
+            style={{
+              display: "flex",
+              textDecoration: "none",
+              color: "black",
+              cursor: "pointer",
+            }}
+            params={{ postId: _id }}
+          >
+            <FlexBox
+              flexDirection="row"
+              justifyContent="flex-start"
+              alignItems="center"
+            >
+              <div style={{ fontWeight: "600" }}>Like or Comment</div>
+              <BsArrowRight style={{ marginLeft: "0.5rem" }} />
+            </FlexBox>
+          </Link>
+        </div>
+      ) : (
+        <ReactiontWrapper>
+          <ReactiontItemWrapper>
+            {postState.isPostLiked ? (
+              <AiFillHeart
+                style={{ marginRight: "0.5rem", cursor: "pointer" }}
+                size={20}
+                color="red"
+                onClick={handleLikeToggle}
+              />
+            ) : (
+              <AiOutlineHeart
+                style={{ marginRight: "0.5rem" }}
+                size={20}
+                onClick={handleLikeToggle}
+              />
+            )}
+            <div style={{ cursor: "pointer" }}>{likes?.length}</div>
+          </ReactiontItemWrapper>
+          <ReactiontItemWrapper>
             <RiChat3Line style={{ marginRight: "0.5rem" }} size={20} />
             <div>{comments?.length}</div>
-          </Link>
-        </ReactiontItemWrapper>
-        {/* <ReactiontItemWrapper>
-          <TiArrowForwardOutline style={{ marginRight: "0.5rem" }} size={25} />
-        </ReactiontItemWrapper> */}
-      </ReactiontWrapper>
+          </ReactiontItemWrapper>
+        </ReactiontWrapper>
+      )}
     </div>
   );
 };
