@@ -12,9 +12,13 @@ import FlexBox from "./FlexBox";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { ImCompass2 } from "react-icons/im";
+import { IoIosCompass } from "react-icons/io";
+import { useSelector } from "react-redux";
 
-const BottomButtons = () => {
+const DesktopButtons = () => {
   const [selectedButton, setSelectedButton] = useState("Home");
+  const { user } = useSelector((state) => state.user);
   const buttonClickHandler = (button) => {
     setSelectedButton(button);
   };
@@ -51,19 +55,13 @@ const BottomButtons = () => {
     },
     {
       line: (
-        <AiOutlineNotification
-          size="28"
-          onClick={() => buttonClickHandler("notification")}
-        />
+        <ImCompass2 size="28" onClick={() => buttonClickHandler("explore")} />
       ),
       fill: (
-        <AiFillNotification
-          size="28"
-          onClick={() => buttonClickHandler("notification")}
-        />
+        <IoIosCompass size="28" onClick={() => buttonClickHandler("explore")} />
       ),
-      buttonName: "notification",
-      linkTo: "/notifications",
+      buttonName: "explore",
+      linkTo: "/explore",
     },
     {
       line: (
@@ -73,7 +71,7 @@ const BottomButtons = () => {
         <RiUser3Fill size="28" onClick={() => buttonClickHandler("user")} />
       ),
       buttonName: "user",
-      linkTo: "/profile",
+      linkTo: `/profile/${user._id}`,
     },
   ];
   return (
@@ -82,13 +80,13 @@ const BottomButtons = () => {
       justifyContent="space-between"
       alignItems="center"
       style={{
-        background: "white",
+        background: "transparent",
         paddingTop: "0.5rem",
         paddingBottom: "0.5rem",
       }}
     >
       {buttons.map((button, i) => (
-        <Button key={i}>
+        <Button key={i} style={{ margin: "auto 0.5rem" }}>
           <Link to={button.linkTo}>
             {selectedButton === button.buttonName ? button.fill : button.line}
           </Link>
@@ -105,4 +103,4 @@ const Button = styled.div`
   }
 `;
 
-export default BottomButtons;
+export default DesktopButtons;
