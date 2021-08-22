@@ -5,4 +5,5 @@ export { default as Avatar } from "./Avatar";
 export { default as FlexBox } from "./FlexBox";
 export { default as BottomButtons } from "./BottomButtons";
 export { default as PostsGrid } from "./PostsGrid";
-export { default as Loader } from "./loader/Loader";
+export { default as StyledLink } from "./StyledLink";
+export { default as Navbar } from "./Navbar";
