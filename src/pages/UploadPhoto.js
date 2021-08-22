@@ -13,6 +13,7 @@ import {
 } from "../features/user/UserSlice";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
+import { createStory } from "../features/story/StorySlice";
 
 const UploadPhoto = ({ photoType }) => {
   const history = useHistory();
@@ -26,6 +27,7 @@ const UploadPhoto = ({ photoType }) => {
 
   const handleNext = async () => {
     if (fileState === null) {
+      console.log("NULL FILE STATE -> RETURNING");
       return;
     }
     if (photoType === "Profile") {
@@ -34,19 +36,31 @@ const UploadPhoto = ({ photoType }) => {
       if (response.meta.requestStatus === "fulfilled") {
         history.push("/upload-photo/cover");
       }
-    } else {
+    } else if (photoType === "Cover") {
       const response = await dispatch(uploadCoverPicture(file));
+      if (response.meta.requestStatus === "fulfilled") {
+        history.push("/feed");
+      }
+    } else if (photoType === "Story") {
+      const response = await dispatch(createStory(file));
       if (response.meta.requestStatus === "fulfilled") {
         history.push("/feed");
       }
     }
   };
 
+  const skipClickHandler = () => {
+    if (photoType === "Profile") {
+      history.push("/upload-photo/cover");
+    } else if (photoType === "Cover") {
+      history.push("/feed");
+    }
+  };
   return (
     <div>
       <NavDiv>
         <Logo />
-        <StyledButton>Skip</StyledButton>
+        <StyledButton onClick={skipClickHandler}>Skip</StyledButton>
       </NavDiv>
       <h2>Add {photoType} Picture</h2>
 
@@ -98,7 +112,6 @@ const SelectFileLabel = styled.label`
   margin-top: 1rem;
   border-radius: 0.5rem;
 `;
-
 
 const UploadedImage = styled.img`
   height: auto;

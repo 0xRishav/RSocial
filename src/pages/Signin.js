@@ -8,6 +8,8 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router";
+import Loader from "react-loader";
+import { loaderOptions } from "../utils/utils";
 
 const Signin = () => {
   const [formData, setFormData] = useState({
@@ -17,6 +19,7 @@ const Signin = () => {
   const [isFormEmpty, setIsFormEmpty] = useState(true);
   const dispatch = useDispatch();
   const history = useHistory();
+  const [loading, setLoading] = useState(false);
 
   function ValidateEmail(email) {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
@@ -34,6 +37,7 @@ const Signin = () => {
   };
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     for (const key in formData) {
       if (formData[key] === "") {
@@ -56,14 +60,15 @@ const Signin = () => {
     }
 
     const response = await dispatch(signinUser(body));
-    console.log("SUP RES", response);
     if (response.meta.requestStatus === "fulfilled") {
+      setLoading(false);
       history.push("/");
     }
   };
 
   return (
     <div>
+      {<Loader loaded={!loading} options={loaderOptions} />}
       <NavDiv>
         <Logo />
       </NavDiv>

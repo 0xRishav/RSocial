@@ -7,6 +7,8 @@ import { useState } from "react";
 import { useHistory } from "react-router";
 import { signupUser } from "../features/user/UserSlice";
 import { useSelector, useDispatch } from "react-redux";
+import { loaderOptions } from "../utils/utils";
+import Loader from "react-loader";
 
 const Signup = () => {
   const history = useHistory();
@@ -38,6 +40,11 @@ const Signup = () => {
       placeholder: "Confirm Password",
       type: "password",
       name: "confirmPassword",
+    },
+    {
+      placeholder: "Bio",
+      type: "text",
+      name: "bio",
     },
   ];
 
@@ -76,7 +83,7 @@ const Signup = () => {
   };
   return (
     <div>
-      {authState.loading && <div>Loading.....</div>}
+      {<Loader loaded={!authState.loading} options={loaderOptions} />}
       <NavDiv>
         <Logo />
       </NavDiv>

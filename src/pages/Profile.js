@@ -4,32 +4,72 @@ import { Avatar, BottomButtons, FlexBox, PostsGrid } from "../components";
 import { useSelector } from "react-redux";
 import { fetchUserPosts } from "../features/post/PostSlice";
 import { useDispatch } from "react-redux";
+import { useParams } from "react-router";
+import { fetchParticularUser } from "../features/user/UserSlice";
+import useWindowDimensions from "../custom-hooks/useWindowDimensions";
+import DesktopButtons from "../components/DesktopButtons";
+import { defaultCoverPicture, defaultProfilePicture } from "../utils/utils";
 
 const Profile = () => {
-  const { user, loading, errMessage } = useSelector((state) => state.user);
-  const postState = useSelector((state) => state.post);
+  const { width } = useWindowDimensions();
+  const { userId } = useParams();
+  console.log("GOT", userId);
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchParticularUser(userId));
+  }, []);
+  const { fetchedUser, loading, errMessage } = useSelector(
+    (state) => state.user
+  );
+  const postState = useSelector((state) => state.post);
 
   useEffect(() => {
     dispatch(fetchUserPosts());
   }, []);
 
-  console.log("UserPosts", postState.userPosts);
+  const purpleCover =
+    "https://images.unsplash.com/photo-1579547621309-5e57ab324182?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1500&q=80";
 
-  const imageSrc =
-    "https://images.unsplash.com/photo-1563991522451-90d2395a8854?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8Y292ZXIlMjBwaWN0dXJlfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60";
-  const imageSrc2 =
-    "https://images.unsplash.com/photo-1584999734482-0361aecad844?ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTR8fHByb2ZpbGUlMjBwaWN0dXJlfGVufDB8fDB8fA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60";
   return (
     <div>
       <ProfileInfoWrapper>
-        <CoverPicture src={user.coverPicture} />
-        <h2 style={{ position: "absolute", top: "0rem", left: "2rem" }}>
-          {user.username}
-        </h2>
+        <CoverPicture
+          src={
+            fetchedUser.coverPicture
+              ? fetchedUser.coverPicture
+              : defaultCoverPicture
+          }
+        />
+        {width > 725 ? (
+          <FlexBox
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
+            // style={{ width: "90%", margin: "auto" }}
+            style={{
+              position: "absolute",
+              top: "0rem",
+              width: "90%",
+              margin: "auto",
+              left: "3rem",
+            }}
+          >
+            <h2>{fetchedUser.username}</h2>
+            <DesktopButtons />
+          </FlexBox>
+        ) : (
+          <h2 style={{ position: "absolute", top: "0rem", left: "2rem" }}>
+            {fetchedUser.username}
+          </h2>
+        )}
+
         <ProfileWrapper>
           <Avatar
-            src={user.profilePicture}
+            src={
+              fetchedUser.profilePicture
+                ? fetchedUser.profilePicture
+                : defaultProfilePicture
+            }
             size="6rem"
             alt="profile-pic"
             style={{
@@ -42,7 +82,7 @@ const Profile = () => {
       </ProfileInfoWrapper>
       <ProfileWrapper>
         <h3 style={{ marginTop: "4rem" }}>Rishav Bharti</h3>
-        <FlexBox>
+        {/* <FlexBox>
           <FlexBox
             flexDirection="column"
             alignItems="center"
@@ -50,7 +90,7 @@ const Profile = () => {
             style={{ width: "50%" }}
           >
             <FollowHeading>Followers</FollowHeading>
-            <p>{user?.followers?.length}</p>
+            <p>{fetchedUser?.followers?.length}</p>
           </FlexBox>
           <FlexBox
             flexDirection="column"
@@ -59,22 +99,18 @@ const Profile = () => {
             style={{ width: "50%" }}
           >
             <FollowHeading>Following</FollowHeading>
-            <p>{user.followings.length}</p>
+            <p>{fetchedUser?.followings?.length}</p>
           </FlexBox>
-        </FlexBox>
-        <p>
-          Stick to The Context. The essential thing to understand before
-          introduce yourself is the context of the situation you are in.
-        </p>
+        </FlexBox> */}
+        <p>{fetchedUser.bio}</p>
         <div style={{ marginTop: "2rem" }}>
           <h2 style={{ textAlign: "left" }}>Feed</h2>
           <PostsGrid postsType="User" />
+          {postState.feed.length === 0 && <h1>0 Posts</h1>}
         </div>
       </ProfileWrapper>
 
-      <div style={{ marginLeft: "5%" }}>
-        <BottomButtons postsType="User" />
-      </div>
+      <div style={{ marginLeft: "5%" }}>{width < 725 && <BottomButtons />}</div>
     </div>
   );
 };

@@ -1,22 +1,107 @@
 import styled from "styled-components";
-import { BottomButtons, PostsGrid } from "../components";
+import {
+  Avatar,
+  BottomButtons,
+  FlexBox,
+  Navbar,
+  PostsGrid,
+} from "../components";
 import { RiSearch2Line } from "react-icons/ri";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllUsers } from "../features/user/UserSlice";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import useWindowDimensions from "../custom-hooks/useWindowDimensions";
+import Loader from "react-loader";
+import { defaultProfilePicture, loaderOptions } from "../utils/utils";
 
 const Search = () => {
+  const { width } = useWindowDimensions();
+  const dispatch = useDispatch();
+  const { allUsers, loading } = useSelector((state) => state.user);
+  const [searchFilteredUsers, setSearchFilteredUsers] = useState([]);
+  useEffect(() => {
+    dispatch(fetchAllUsers());
+  }, []);
+  const searchInputChangeHandler = (e) => {
+    const searchInput = e.target.value;
+    const filteredUsers = allUsers.filter(
+      (user) =>
+        user.name.toLowerCase().includes(searchInput.toLowerCase()) ||
+        user.username.toLowerCase().includes(searchInput.toLowerCase())
+    );
+    setSearchFilteredUsers(filteredUsers);
+  };
+
   return (
     <div>
+      {<Loader loaded={!loading} options={loaderOptions} />}
+      {width > 725 && <Navbar />}
       <SearchWrapper>
         <RiSearch2Line
           style={{ position: "absolute", left: "2.5%", top: "48%" }}
           size="18"
         />
-        <SearchBar placeholder="Search" />
+        <SearchBar onChange={searchInputChangeHandler} placeholder="Search" />
       </SearchWrapper>
       <div style={{ marginTop: "2rem" }}>
-        <h2 style={{ textAlign: "left" }}>Explore</h2>
-        <PostsGrid postsType="All" />
+        <h2 style={{ textAlign: "left" }}>Search</h2>
+        {searchFilteredUsers.map((user) => (
+          <Link
+            to={`/profile/${user._id}`}
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            <FlexBox
+              flexDirection="row"
+              justifyContent="flex-start"
+              alignItems="center"
+              style={{ margin: "1rem auto" }}
+            >
+              <Avatar
+                size="3.5rem"
+                src={
+                  user.profilePicture
+                    ? user.profilePicture
+                    : defaultProfilePicture
+                }
+              />
+              <FlexBox
+                style={{ border: "1px black", marginLeft: "1.2rem" }}
+                flexDirection="column"
+                justifyContent="center"
+                alignItems="flex-start"
+              >
+                <p
+                  style={{
+                    marginTop: "0",
+                    marginLeft: "0",
+                    marginRight: "0",
+                    marginBottom: "0.35rem",
+                    fontWeight: "700",
+                  }}
+                >
+                  {user.name}
+                </p>
+                <p
+                  style={{
+                    marginTop: "0",
+                    marginLeft: "0",
+                    marginRight: "0",
+                    marginBottom: "0.5rem",
+                    opacity: "0.7",
+                    fontWeight: "500",
+                  }}
+                >
+                  {user.username}
+                </p>
+              </FlexBox>
+            </FlexBox>
+          </Link>
+        ))}
       </div>
-      <BottomButtons />
+
+      {width < 725 && <BottomButtons />}
     </div>
   );
 };
