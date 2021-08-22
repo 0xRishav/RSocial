@@ -1,9 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { userApi } from "./UserApi";
-import { useHistory } from "react-router";
 
 const initialState = {
   user: {},
+  fetchedUser: {},
+  allUsers: [],
   accessToken: null,
   refreshToken: null,
   error: "",
@@ -89,6 +90,44 @@ export const uploadCoverPicture = createAsyncThunk(
       if (response.status === 200) {
         return {
           user: response.data.data.user,
+        };
+      } else {
+        console.log(response);
+      }
+      console.log("response", response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+export const fetchAllUsers = createAsyncThunk(
+  "user/fetchAllUsers",
+  async () => {
+    try {
+      const response = await userApi.fetchAllUsers();
+      console.log("allUsers", response);
+      if (response.status === 200) {
+        return {
+          allUsers: response.data.data.allUsers,
+        };
+      } else {
+        console.log(response);
+      }
+      console.log("response", response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+export const fetchParticularUser = createAsyncThunk(
+  "user/fetchParticularUser",
+  async (userId) => {
+    try {
+      const response = await userApi.fetchParticularUser(userId);
+      console.log("FETCHED_USER_RES", response);
+      if (response.status === 200) {
+        return {
+          fetchedUser: response.data.data.user,
         };
       } else {
         console.log(response);
@@ -191,6 +230,28 @@ const userSlice = createSlice({
       state.errMessage = action.payload.message;
     },
     [uploadCoverPicture.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [fetchAllUsers.fulfilled]: (state, action) => {
+      state.allUsers = action.payload.allUsers;
+      state.loading = false;
+    },
+    [fetchAllUsers.rejected]: (state, action) => {
+      state.loading = false;
+      state.errMessage = action.payload.message;
+    },
+    [fetchAllUsers.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [fetchParticularUser.fulfilled]: (state, action) => {
+      state.fetchedUser = action.payload.fetchedUser;
+      state.loading = false;
+    },
+    [fetchParticularUser.rejected]: (state, action) => {
+      state.loading = false;
+      state.errMessage = action.payload.message;
+    },
+    [fetchParticularUser.pending]: (state, action) => {
       state.loading = true;
     },
   },

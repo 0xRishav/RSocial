@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const baseUrl =
-  "http://ec2-3-14-143-74.us-east-2.compute.amazonaws.com:3000/user";
-// "http://localhost:4000/user";
+  // "http://ec2-3-14-143-74.us-east-2.compute.amazonaws.com:3000/user";
+  "http://localhost:4000/user";
 
 axios.interceptors.request.use(
   (config) => {
@@ -52,6 +52,12 @@ export const userApi = {
   },
   login: async (body) => {
     return await axios.post(`${baseUrl}/login`, body);
+  },
+  fetchParticularUser: async (userId) => {
+    return await axios.post(`${baseUrl}/fetch-particular-user/${userId}`);
+  },
+  fetchAllUsers: async () => {
+    return await axios.get(`${baseUrl}/fetch-all-users`);
   },
   generateAccessToken: async (body) => {
     return await axios.post(`${baseUrl}/generate-refresh-tokens`, body);
