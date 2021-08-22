@@ -1,4 +1,4 @@
-import { BottomButtons, FlexBox } from "../components";
+import { BottomButtons, FlexBox, Navbar } from "../components";
 import { StyledButton } from "../components/Button";
 import { FcImageFile } from "react-icons/fc";
 import { MdBlock } from "react-icons/md";
@@ -7,10 +7,14 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { useState } from "react";
 import { uploadPostPhoto, createPost } from "../features/post/PostSlice";
+import useWindowDimensions from "../custom-hooks/useWindowDimensions";
+import { loaderOptions } from "../utils/utils";
+import Loader from "react-loader";
 
 const CreatePost = () => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const { width } = useWindowDimensions();
   const [fileState, setFileState] = useState(null);
   const [file, setFile] = useState(null);
   const [isPictureUploaded, setIsPictureUploaded] = useState(false);
@@ -19,6 +23,8 @@ const CreatePost = () => {
     url: "",
     public_id: "",
   });
+  const [isError, setisError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleFileChange = (event) => {
     setFileState(URL.createObjectURL(event.target.files[0]));
@@ -29,9 +35,10 @@ const CreatePost = () => {
     if (fileState === null) {
       return;
     }
+    setLoading(true);
     const response = await dispatch(uploadPostPhoto(file));
-    console.log(response);
     if (response.meta.requestStatus === "fulfilled") {
+      setLoading(false);
       setIsPictureUploaded(true);
       setPostInfo({
         ...postInfo,
@@ -49,14 +56,22 @@ const CreatePost = () => {
   };
 
   const createPostHandler = async () => {
+    if (!isPictureUploaded || postInfo.caption === "") {
+      setisError(true);
+      return;
+    }
+    setLoading(true);
     const response = await dispatch(createPost(postInfo));
     if (response.meta.requestStatus === "fulfilled") {
+      setLoading(false);
       history.push("/");
     }
   };
 
   return (
     <div>
+      {<Loader loaded={!loading} options={loaderOptions} />}
+      {width > 725 && <Navbar />}
       <h1>Create Post</h1>
       <FlexBox
         flexDirection="column"
@@ -80,13 +95,15 @@ const CreatePost = () => {
         ) : (
           <>
             <UploadedImage src={fileState} alt="post-pic" />
-            <StyledButton
-              primary
-              style={{ marginTop: "1rem", width: "100%" }}
-              onClick={(e) => handleUpload(e)}
-            >
-              Upload File
-            </StyledButton>
+            {!isPictureUploaded && (
+              <StyledButton
+                primary
+                style={{ marginTop: "1rem", width: "100%" }}
+                onClick={(e) => handleUpload(e)}
+              >
+                Upload File
+              </StyledButton>
+            )}
           </>
         )}
       </FlexBox>
@@ -94,6 +111,11 @@ const CreatePost = () => {
         placeholder="Write Caption Here..."
         onChange={(e) => handleCaptionChange(e)}
       />
+      {isError && (
+        <div style={{ color: "red" }}>
+          Please include caption or upload photo
+        </div>
+      )}
       <StyledButton
         style={{
           marginTop: "1rem",
@@ -103,9 +125,10 @@ const CreatePost = () => {
         }}
         onClick={createPostHandler}
       >
-        Create Post {!isPictureUploaded && <MdBlock />}
+        Create Post{" "}
+        {!isPictureUploaded || (postInfo.caption === "" && <MdBlock />)}
       </StyledButton>
-      <BottomButtons />
+      {width < 725 && <BottomButtons />}
     </div>
   );
 };
