@@ -1,25 +1,30 @@
 import styled from "styled-components";
 import { useSelector } from "react-redux";
+import Loader from "react-loader";
+import { loaderOptions } from "../utils/utils";
 
 const PostsGrid = ({ postsType }) => {
   const { feed, userPosts, loading } = useSelector((state) => state.post);
 
   return (
-    <PostList>
-      {(postsType === "User" ? userPosts : feed).map((image, i) => (
-        <Post>
-          <PostImageFigure>
-            <PostImage src={image.photoUrl} alt="" />
-          </PostImageFigure>
-          <PostOverlay>
-            <p>
-              <PostLike>{image?.likes?.length}</PostLike>
-              <PostComment>{image?.comments?.length}</PostComment>
-            </p>
-          </PostOverlay>
-        </Post>
-      ))}
-    </PostList>
+    <>
+      {<Loader loaded={!loading} options={loaderOptions} />}
+      <PostList>
+        {(postsType === "User" ? userPosts : feed).map((image, i) => (
+          <Post>
+            <PostImageFigure>
+              <PostImage src={image.photoUrl} alt="" />
+            </PostImageFigure>
+            <PostOverlay>
+              <p>
+                <PostLike>{image?.likes?.length}</PostLike>
+                <PostComment>{image?.comments?.length}</PostComment>
+              </p>
+            </PostOverlay>
+          </Post>
+        ))}
+      </PostList>
+    </>
   );
 };
 

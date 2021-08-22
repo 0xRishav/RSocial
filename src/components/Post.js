@@ -15,7 +15,6 @@ import styled from "styled-components";
 import { unstable_renderSubtreeIntoContainer } from "react-dom";
 import { useEffect } from "react";
 import { likeDislikePost } from "../features/post/PostSlice";
-import StyledLink from "./StyledLink";
 import FlexBox from "./FlexBox";
 import { defaultProfilePicture } from "../utils/utils";
 
