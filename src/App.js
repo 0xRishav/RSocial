@@ -23,6 +23,7 @@ import {
   CreatePost,
   Notifications,
   Profile,
+  Explore,
 } from "./pages";
 import styled, { Theam } from "styled-components";
 import StoryPage from "./features/story/StoryPage";
@@ -34,12 +35,12 @@ function App() {
   }, []);
   const { accessToken } = useSelector((state) => state.user);
 
-  console.log("accessToken", accessToken);
 
   return (
     <div className="App">
       <Switch>
-        <Route exact path="/profile" component={Profile} />
+        <Route exact path="/profile/:userId" component={Profile} />
+        <PrivateRoute exact path="/post-page/:postId" component={PostPage} />
         <AppWrapper>
           <Route exact path="/">
             {accessToken ? <Redirect to="/feed" /> : <Landing />}
@@ -55,15 +56,18 @@ function App() {
           <PrivateRoute exact path="/feed" component={Feed} />
           <PrivateRoute exact path="/search" component={Search} />
           <PrivateRoute exact path="/create-post" component={CreatePost} />
+          <PrivateRoute exact path="/explore" component={Explore} />
           <PrivateRoute exact path="/notifications" component={Notifications} />
           <PrivateRoute exact path="/create-story" component={StoryPage} />
 
-          <PrivateRoute exact name="/post-page" path="/:postId" component={PostPage} />
           <Route path="/upload-photo/profile">
             <UploadPhoto photoType="Profile" />
           </Route>
           <Route path="/upload-photo/cover">
             <UploadPhoto photoType="Cover" />
+          </Route>
+          <Route path="/upload-photo/story">
+            <UploadPhoto photoType="Story" />
           </Route>
         </AppWrapper>
       </Switch>
@@ -75,6 +79,12 @@ const AppWrapper = styled.div`
   width: 90%;
   /* position: relative; */
   margin: auto;
+  @media (min-width: 725px) {
+    width: 60%;
+  }
+  @media (min-width: 900px) {
+    width: 50%;
+  }
 `;
 
 export default App;
