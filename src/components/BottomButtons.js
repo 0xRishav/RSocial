@@ -11,7 +11,6 @@ import { RiAddBoxLine } from "react-icons/ri";
 import { RiAddBoxFill } from "react-icons/ri";
 import { ImCompass2 } from "react-icons/im";
 import FlexBox from "./FlexBox";
-import { StyledLink } from ".";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
