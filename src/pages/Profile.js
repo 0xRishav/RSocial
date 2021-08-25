@@ -13,7 +13,6 @@ import { defaultCoverPicture, defaultProfilePicture } from "../utils/utils";
 const Profile = () => {
   const { width } = useWindowDimensions();
   const { userId } = useParams();
-  console.log("GOT", userId);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchParticularUser(userId));

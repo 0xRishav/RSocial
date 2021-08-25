@@ -11,7 +11,7 @@ const PostsGrid = ({ postsType }) => {
       {<Loader loaded={!loading} options={loaderOptions} />}
       <PostList>
         {(postsType === "User" ? userPosts : feed).map((image, i) => (
-          <Post>
+          <Post key={i}>
             <PostImageFigure>
               <PostImage src={image.photoUrl} alt="" />
             </PostImageFigure>

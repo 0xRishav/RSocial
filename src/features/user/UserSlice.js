@@ -17,7 +17,6 @@ export const signinUser = createAsyncThunk(
   async (userDetails) => {
     try {
       const response = await userApi.login(userDetails);
-      console.log("RESPONSE SINGIN", response);
       if (response.status === 200) {
         return {
           user: response.data.data.user,
@@ -63,7 +62,6 @@ export const uploadProfilePicture = createAsyncThunk(
     try {
       const formData = new FormData();
       formData.append("image", file, file.name);
-      console.log("file", formData);
       const response = await userApi.uploadProfilePicture(formData);
       if (response.status === 200) {
         return {
@@ -84,9 +82,7 @@ export const uploadCoverPicture = createAsyncThunk(
     try {
       const formData = new FormData();
       formData.append("image", file, file.name);
-      console.log("file", formData);
       const response = await userApi.uploadCoverPicture(formData);
-      console.log("RES_UP", response);
       if (response.status === 200) {
         return {
           user: response.data.data.user,
@@ -94,7 +90,6 @@ export const uploadCoverPicture = createAsyncThunk(
       } else {
         console.log(response);
       }
-      console.log("response", response);
     } catch (error) {
       console.log(error);
     }
@@ -105,7 +100,6 @@ export const fetchAllUsers = createAsyncThunk(
   async () => {
     try {
       const response = await userApi.fetchAllUsers();
-      console.log("allUsers", response);
       if (response.status === 200) {
         return {
           allUsers: response.data.data.allUsers,
@@ -113,7 +107,6 @@ export const fetchAllUsers = createAsyncThunk(
       } else {
         console.log(response);
       }
-      console.log("response", response);
     } catch (error) {
       console.log(error);
     }
@@ -124,15 +117,12 @@ export const fetchParticularUser = createAsyncThunk(
   async (userId) => {
     try {
       const response = await userApi.fetchParticularUser(userId);
-      console.log("FETCHED_USER_RES", response);
       if (response.status === 200) {
         return {
           fetchedUser: response.data.data.user,
         };
       } else {
-        console.log(response);
       }
-      console.log("response", response);
     } catch (error) {
       console.log(error);
     }

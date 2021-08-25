@@ -41,7 +41,6 @@ const Signin = () => {
     e.preventDefault();
     for (const key in formData) {
       if (formData[key] === "") {
-        console.log(key, formData[key]);
         setIsFormEmpty(true);
         return;
       }

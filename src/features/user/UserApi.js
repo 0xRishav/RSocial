@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const baseUrl =
-  // "http://ec2-3-14-143-74.us-east-2.compute.amazonaws.com:3000/user";
-  "http://localhost:4000/user";
+  "http://ec2-3-14-143-74.us-east-2.compute.amazonaws.com:4000/user";
+// "http://localhost:4000/user";
 
 axios.interceptors.request.use(
   (config) => {
@@ -17,11 +17,9 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   (response) => {
-    console.log("NEW RES", response);
     return response;
   },
   async function (error) {
-    console.log("NEW ERROR", error);
     const originalRequest = error.config;
     let refreshToken = localStorage.getItem("refreshToken");
     if (
@@ -37,7 +35,6 @@ axios.interceptors.response.use(
         .then((res) => {
           if (res.status === 200) {
             localStorage.setItem("accessToken", res.data.accessToken);
-            console.log("Access token refreshed!");
             return axios(originalRequest);
           }
         });

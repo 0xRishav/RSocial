@@ -22,24 +22,15 @@ const PostPage = () => {
 
   const { post, loading } = useSelector((state) => state.post);
 
-  console.log("post", post);
-
   const dispatch = useDispatch();
   const { postId } = useParams();
 
   const [commentInput, setCommentInput] = useState("");
-  console.log(commentInput);
 
   useEffect(() => {
     const body = { postId: postId };
     dispatch(fetchPost(body));
   }, []);
-
-  // useEffect(() => {
-  //   setPostComments(post.comments);
-  // }, []);
-
-  console.log("post.comments_state", postComments);
 
   const handleInputChange = (e) => {
     setCommentInput(e.target.value);
@@ -47,14 +38,6 @@ const PostPage = () => {
 
   const handleCommentSubmit = (e) => {
     e.preventDefault();
-    // const newComment = {
-    //   comment: commentInput,
-    //   createdAt: Date.now(),
-    //   like: [],
-    //   post: postId,
-    //   user: post.user,
-    // };
-    // setPostComments([...postComments, newComment]);
     dispatch(createComment({ postId: postId, comment: commentInput }));
   };
 
@@ -85,8 +68,8 @@ const PostPage = () => {
           <Post {...post} />
         </div>
         <CommentsWrapper>
-          {post?.comments?.map((comment) => (
-            <div>
+          {post?.comments?.map((comment, i) => (
+            <div key={i}>
               <FlexBox
                 flexDirection="row"
                 justifyContent="flex-start"

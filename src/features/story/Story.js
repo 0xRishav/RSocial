@@ -17,7 +17,6 @@ const Story = () => {
   const [modalIsOpen, setIsOpen] = useState(false);
   const [currentStory, setCurrentStory] = useState(null);
 
-  console.log("storyState", storyState);
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
@@ -40,8 +39,6 @@ const Story = () => {
     setIsOpen(false);
   }
 
-  // console.log(otherUserStories[0].createdAt);
-  console.log({ currentUserStory });
   Modal.setAppElement("#root");
 
   return (

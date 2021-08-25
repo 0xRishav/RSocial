@@ -14,10 +14,13 @@ import {
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import { createStory } from "../features/story/StorySlice";
+import { loaderOptions } from "../utils/utils";
+import Loader from "react-loader";
 
 const UploadPhoto = ({ photoType }) => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   const [fileState, setFileState] = useState(null);
   const [file, setFile] = useState(null);
   const handleFileChange = (event) => {
@@ -27,23 +30,25 @@ const UploadPhoto = ({ photoType }) => {
 
   const handleNext = async () => {
     if (fileState === null) {
-      console.log("NULL FILE STATE -> RETURNING");
       return;
     }
+    setLoading(true);
     if (photoType === "Profile") {
       const response = await dispatch(uploadProfilePicture(file));
-      console.log(response);
       if (response.meta.requestStatus === "fulfilled") {
+        setLoading(false);
         history.push("/upload-photo/cover");
       }
     } else if (photoType === "Cover") {
       const response = await dispatch(uploadCoverPicture(file));
       if (response.meta.requestStatus === "fulfilled") {
+        setLoading(false);
         history.push("/feed");
       }
     } else if (photoType === "Story") {
       const response = await dispatch(createStory(file));
       if (response.meta.requestStatus === "fulfilled") {
+        setLoading(false);
         history.push("/feed");
       }
     }
@@ -58,6 +63,7 @@ const UploadPhoto = ({ photoType }) => {
   };
   return (
     <div>
+      {<Loader loaded={!loading} options={loaderOptions} />}
       <NavDiv>
         <Logo />
         <StyledButton onClick={skipClickHandler}>Skip</StyledButton>

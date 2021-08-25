@@ -29,21 +29,10 @@ const Post = ({
 }) => {
   const dispatch = useDispatch();
   const postState = useSelector((state) => state.post);
-  // console.log(user);
-
-  // const [isLiked, setisLiked] = useState(false);
-  // console.log("likes", likes?.length);
-  // useEffect(() => {
-  //   const isLiked = checkIsLiked();
-  //   setisLiked(isLiked);
-  // }, [likes]);
-
-  console.log(postState.isPostLiked);
 
   const filteredLikedArray = postState?.post?.likes?.filter(
     (like) => like?.user?._id === user?._id
   );
-  console.log("filteredLikedArray", postState.isPostLiked);
 
   const handleLikeToggle = () => {
     dispatch(likeDislikePost({ likeableId: _id, type: "Post" }));

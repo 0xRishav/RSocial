@@ -11,14 +11,10 @@ const initialState = {
 export const createStory = createAsyncThunk(
   "story/createStory",
   async (file) => {
-    console.log("File from slice");
-    console.log("File from slice", file);
     try {
       const formData = new FormData();
       formData.append("image", file, file.name);
-      console.log("FormData from slice", formData);
       const response = await storyApi.createStory(formData);
-      console.log("CREATE_STORY_RES", response);
       if (response.status === 200) {
         return {
           story: response.data.data.story,
@@ -37,7 +33,6 @@ export const fetchAllStories = createAsyncThunk(
   async () => {
     try {
       const response = await storyApi.fetchAllStories();
-      console.log("STORY RES", response);
       if (response.status === 200) {
         return {
           allStories: response.data.data.activeStories,

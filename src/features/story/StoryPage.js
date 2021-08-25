@@ -9,16 +9,12 @@ const StoryPage = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const { file, fileState } = location.state;
-  console.log("File from story page", file);
-  console.log("file state from story page", fileState);
   const handleUpload = async () => {
     if (fileState === null) {
       return;
     }
     const response = await dispatch(createStory(file));
-    console.log(response);
     if (response.meta.requestStatus === "fulfilled") {
-      console.log("Story response", response);
       history.push("/feed");
     }
   };

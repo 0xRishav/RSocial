@@ -14,7 +14,6 @@ const Signup = () => {
   const history = useHistory();
   const authState = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  console.log(authState);
   const inputs = [
     {
       placeholder: "name",
@@ -70,13 +69,11 @@ const Signup = () => {
     e.preventDefault();
     for (const key in formData) {
       if (formData[key] === "") {
-        console.log(key, formData[key]);
         setIsFormEmpty(true);
         return;
       }
     }
     const response = await dispatch(signupUser(formData));
-    console.log("SUP RES", response);
     if (response.meta.requestStatus === "fulfilled") {
       history.push("/upload-photo/profile");
     }
@@ -89,8 +86,9 @@ const Signup = () => {
       </NavDiv>
       <h2>Sign Up to RSocial</h2>
       <form>
-        {inputs.map((input) => (
+        {inputs.map((input, i) => (
           <Input
+            key={i}
             placeholder={input.placeholder}
             name={input.name}
             type={input.type}

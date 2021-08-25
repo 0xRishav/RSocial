@@ -34,7 +34,7 @@ const Notifications = () => {
     <div>
       <h2 style={{ textAlign: "left" }}>Notifications</h2>
       {notifications.map((notification, i) => (
-        <NotificationWrapper>
+        <NotificationWrapper key={i}>
           <NotificationDivider />
           <FlexBox
             key={i}

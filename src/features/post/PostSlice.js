@@ -53,7 +53,6 @@ export const fetchAllPosts = createAsyncThunk(
   async () => {
     try {
       const response = await postApi.fetchALlPosts();
-      console.log("FEEDD RESPONSWE", response);
       if (response.status === 200) {
         return {
           feed: response.data.data.posts,
@@ -72,7 +71,6 @@ export const fetchUserPosts = createAsyncThunk(
   async () => {
     try {
       const response = await postApi.fetchUserPosts();
-      console.log("FEEDD RESPONSWE", response);
       if (response.status === 200) {
         return {
           feed: response.data.data.posts,
@@ -88,16 +86,13 @@ export const fetchUserPosts = createAsyncThunk(
 export const fetchPost = createAsyncThunk("post/fetchPost", async (body) => {
   try {
     const response = await postApi.fetchPost(body);
-    console.log("fetchPostResponse", response);
     if (response.status === 200) {
-      console.log("fetchPostRES", response);
       return {
         post: response.data.data.populatedPost,
         isPostLiked: response.data.data.isPostLiked,
       };
     }
   } catch (error) {
-    console.log("FETCH_POST_ERROR", error);
     return {
       error,
     };
@@ -108,7 +103,6 @@ export const likeDislikePost = createAsyncThunk(
   async (body) => {
     try {
       const response = await postApi.likeDislikePost(body);
-      console.log("likeDislikePost", response.data.data);
       if (response.status === 200) {
         return {
           post: response.data.data.post,
@@ -127,7 +121,6 @@ export const createComment = createAsyncThunk(
   async (body) => {
     try {
       const response = await postApi.createComment(body);
-      console.log("Create_comment-res", response);
       if (response.status === 200) {
         return {
           newPost: response.data.data.newPost,

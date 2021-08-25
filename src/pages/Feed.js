@@ -13,7 +13,6 @@ const Feed = () => {
   const { width } = useWindowDimensions();
   const dispatch = useDispatch();
   const { feed, loading } = useSelector((state) => state.post);
-  console.log(feed);
   useEffect(() => {
     dispatch(fetchAllPosts());
   }, []);

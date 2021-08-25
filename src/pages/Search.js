@@ -47,8 +47,9 @@ const Search = () => {
       </SearchWrapper>
       <div style={{ marginTop: "2rem" }}>
         <h2 style={{ textAlign: "left" }}>Search</h2>
-        {searchFilteredUsers.map((user) => (
+        {searchFilteredUsers.map((user, i) => (
           <Link
+            key={i}
             to={`/profile/${user._id}`}
             style={{ textDecoration: "none", color: "black" }}
           >
