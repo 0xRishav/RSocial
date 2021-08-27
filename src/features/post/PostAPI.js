@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const baseUrl =
-  "http://ec2-3-14-143-74.us-east-2.compute.amazonaws.com:4000/post";
+const baseUrl = "https://rsocial-api.herokuapp.com/post";
 // "http://localhost:4000/post";
 
 export const postApi = {

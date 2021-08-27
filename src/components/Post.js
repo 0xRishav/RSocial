@@ -17,6 +17,8 @@ import { useEffect } from "react";
 import { likeDislikePost } from "../features/post/PostSlice";
 import FlexBox from "./FlexBox";
 import { defaultProfilePicture } from "../utils/utils";
+import { loaderOptions } from "../utils/utils";
+import Loader from "react-loader";
 
 const Post = ({
   user,
@@ -50,7 +52,7 @@ const Post = ({
   // }
   return (
     <div>
-      {postState.loading && <h1>Loading</h1>}
+      {<Loader loaded={!postState.loading} options={loaderOptions} />}
       <HorizonatalDivider />
       <NameOptionWrapper>
         <NameOptionWrapper>
