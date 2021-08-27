@@ -11,6 +11,8 @@ import DesktopButtons from "../components/DesktopButtons";
 import { defaultCoverPicture, defaultProfilePicture } from "../utils/utils";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
+import { StyledButton } from "../components/Button";
+import { logoutUser } from "../features/user/UserSlice";
 
 const Profile = () => {
   const { width } = useWindowDimensions();
@@ -27,6 +29,10 @@ const Profile = () => {
   useEffect(() => {
     dispatch(fetchUserPosts());
   }, []);
+
+  const signOutUser = () => {
+    dispatch(logoutUser());
+  };
 
   return (
     <div>
@@ -61,12 +67,36 @@ const Profile = () => {
             }}
           >
             <h2>{fetchedUser.username}</h2>
-            <DesktopButtons />
+            <FlexBox
+              flexDirection="row"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <DesktopButtons />
+              <StyledButton primary onClick={signOutUser}>
+                Sign Out
+              </StyledButton>
+            </FlexBox>
           </FlexBox>
         ) : (
-          <h2 style={{ position: "absolute", top: "0rem", left: "2rem" }}>
-            {fetchedUser.username}
-          </h2>
+          <FlexBox
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
+            // style={{ width: "90%", margin: "auto" }}
+            style={{
+              position: "absolute",
+              top: "0rem",
+              width: "90%",
+              margin: "auto",
+              left: "5%",
+            }}
+          >
+            <h2>{fetchedUser.username}</h2>
+            <StyledButton primary onClick={signOutUser}>
+              Sign Out
+            </StyledButton>
+          </FlexBox>
         )}
         <ProfileWrapper>
           <Avatar
