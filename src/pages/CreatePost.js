@@ -10,6 +10,9 @@ import { uploadPostPhoto, createPost } from "../features/post/PostSlice";
 import useWindowDimensions from "../custom-hooks/useWindowDimensions";
 import { loaderOptions } from "../utils/utils";
 import Loader from "react-loader";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
+import Compressor from "compressorjs";
 
 const CreatePost = () => {
   const history = useHistory();
@@ -28,7 +31,13 @@ const CreatePost = () => {
 
   const handleFileChange = (event) => {
     setFileState(URL.createObjectURL(event.target.files[0]));
-    setFile(event.target.files[0]);
+    const image = event.target.files[0];
+    new Compressor(image, {
+      quality: 0.8,
+      success: (compressedResult) => {
+        setFile(compressedResult);
+      },
+    });
   };
 
   const handleUpload = async () => {
@@ -94,7 +103,13 @@ const CreatePost = () => {
           </>
         ) : (
           <>
-            <UploadedImage src={fileState} alt="post-pic" />
+            <LazyLoadImage
+              src={fileState}
+              alt="post-pic"
+              effect="blur"
+              style={{ objectFit: "cover", height: "auto", width: "100%" }}
+            />
+
             {!isPictureUploaded && (
               <StyledButton
                 primary
@@ -157,12 +172,6 @@ const CaptionTextArea = styled.textarea`
   padding: 1rem;
   border-radius: 0.5rem;
   outline: unset;
-`;
-
-const UploadedImage = styled.img`
-  height: auto;
-  width: 100%;
-  object-fit: cover;
 `;
 
 export default CreatePost;

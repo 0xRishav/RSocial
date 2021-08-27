@@ -9,6 +9,8 @@ import { fetchParticularUser } from "../features/user/UserSlice";
 import useWindowDimensions from "../custom-hooks/useWindowDimensions";
 import DesktopButtons from "../components/DesktopButtons";
 import { defaultCoverPicture, defaultProfilePicture } from "../utils/utils";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 const Profile = () => {
   const { width } = useWindowDimensions();
@@ -26,18 +28,23 @@ const Profile = () => {
     dispatch(fetchUserPosts());
   }, []);
 
-  const purpleCover =
-    "https://images.unsplash.com/photo-1579547621309-5e57ab324182?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1500&q=80";
-
   return (
     <div>
       <ProfileInfoWrapper>
-        <CoverPicture
+        <LazyLoadImage
           src={
             fetchedUser.coverPicture
               ? fetchedUser.coverPicture
               : defaultCoverPicture
           }
+          width="100%"
+          alt="post-pic"
+          effect="blur"
+          style={{
+            objectFit: "cover",
+            overflowX: "hidden",
+            height: "30vh",
+          }}
         />
         {width > 725 ? (
           <FlexBox
@@ -61,7 +68,6 @@ const Profile = () => {
             {fetchedUser.username}
           </h2>
         )}
-
         <ProfileWrapper>
           <Avatar
             src={
@@ -116,13 +122,6 @@ const Profile = () => {
 
 const ProfileInfoWrapper = styled.div`
   position: relative;
-`;
-
-const CoverPicture = styled.img`
-  width: 100%;
-  height: 30vh;
-  object-fit: cover;
-  overflow-x: hidden;
 `;
 
 const FollowHeading = styled.div`

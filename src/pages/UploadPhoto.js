@@ -16,6 +16,9 @@ import { useHistory } from "react-router";
 import { createStory } from "../features/story/StorySlice";
 import { loaderOptions } from "../utils/utils";
 import Loader from "react-loader";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
+import Compressor from "compressorjs";
 
 const UploadPhoto = ({ photoType }) => {
   const history = useHistory();
@@ -25,7 +28,13 @@ const UploadPhoto = ({ photoType }) => {
   const [file, setFile] = useState(null);
   const handleFileChange = (event) => {
     setFileState(URL.createObjectURL(event.target.files[0]));
-    setFile(event.target.files[0]);
+    const image = event.target.files[0];
+    new Compressor(image, {
+      quality: 0.8,
+      success: (compressedResult) => {
+        setFile(compressedResult);
+      },
+    });
   };
 
   const handleNext = async () => {
@@ -92,7 +101,12 @@ const UploadPhoto = ({ photoType }) => {
           <SelectFileLabel for="fileInput">Select file</SelectFileLabel>
         </FlexBox>
       ) : (
-        <UploadedImage src={fileState} />
+        <LazyLoadImage
+          src={fileState}
+          alt="UploadedPic"
+          effect="blur"
+          style={{ objectFit: "cover", height: "auto", width: "100%" }}
+        />
       )}
 
       <StyledButton

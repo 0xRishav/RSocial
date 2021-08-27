@@ -11,6 +11,8 @@ import { Link } from "react-router-dom";
 import Modal from "react-modal";
 import React from "react";
 import { defaultProfilePicture } from "../../utils/utils";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 const Story = () => {
   const storyState = useSelector((state) => state.story);
@@ -156,33 +158,21 @@ const Story = () => {
                 }
                 size="3rem"
               />
-              <AiOutlineClose onClick={closeModal} size="30" />
+              <AiOutlineClose onClick={closeModal} size="30" cursor="pointer" />
             </FlexBox>
 
-            <StoryImg src={currentStory?.photoUrl} alt="story" />
+            <LazyLoadImage
+              src={currentStory?.photoUrl}
+              alt="story"
+              effect="blur"
+              style={{ objectFit: "cover", height: "70vh", width: "100%" }}
+            />
           </FlexBox>
         </div>
       </Modal>
     </>
   );
 };
-
-const StoryImg = styled.img`
-  height: 50vh;
-  width: 100%;
-  object-fit: cover;
-`;
-const FileInput = styled.input`
-  color: transparent;
-  display: none;
-`;
-const SelectFileLabel = styled.label`
-  /* padding: 0.6rem 1rem;
-  background: #7c37a6;
-  color: white;
-  margin-top: 1rem;
-  border-radius: 0.5rem; */
-`;
 
 const customStyles = {
   content: {

@@ -10,6 +10,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import Loader from "react-loader";
 import { loaderOptions } from "../utils/utils";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 const Signin = () => {
   const [formData, setFormData] = useState({
@@ -20,6 +22,7 @@ const Signin = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [loading, setLoading] = useState(false);
+  console.log(AuthPageSvg);
 
   function ValidateEmail(email) {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
@@ -73,7 +76,12 @@ const Signin = () => {
       </NavDiv>
       <h2>Welcome back to RSocial</h2>
       <SignInWrapper>
-        <AuthSvg src={AuthPageSvg} alt="handPic" />
+        <LazyLoadImage
+          effect="blur"
+          src={AuthPageSvg}
+          alt="handPic"
+          style={{ width: "80%", height: "auto" }}
+        />
         <Input
           onChange={(e) => handleInputChange(e)}
           placeholder="Username/Email"

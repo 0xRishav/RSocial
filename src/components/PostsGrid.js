@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { useSelector } from "react-redux";
 import Loader from "react-loader";
 import { loaderOptions } from "../utils/utils";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 const PostsGrid = ({ postsType }) => {
   const { feed, userPosts, loading } = useSelector((state) => state.post);
@@ -13,7 +15,17 @@ const PostsGrid = ({ postsType }) => {
         {(postsType === "User" ? userPosts : feed).map((image, i) => (
           <Post key={i}>
             <PostImageFigure>
-              <PostImage src={image.photoUrl} alt="" />
+              <LazyLoadImage
+                src={image.photoUrl}
+                alt="postPic"
+                effect="blur"
+                style={{
+                  verticalAlign: "top",
+                  objectFit: "cover",
+                  height: "100%",
+                  width: "100%",
+                }}
+              />
             </PostImageFigure>
             <PostOverlay>
               <p>

@@ -19,6 +19,8 @@ import FlexBox from "./FlexBox";
 import { defaultProfilePicture } from "../utils/utils";
 import { loaderOptions } from "../utils/utils";
 import Loader from "react-loader";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 const Post = ({
   user,
@@ -70,7 +72,20 @@ const Post = ({
           </AuthorInfoWrapper>
         </NameOptionWrapper>
       </NameOptionWrapper>
-      {photoUrl && <PostImg src={photoUrl} />}
+
+      {photoUrl && (
+        <LazyLoadImage
+          src={photoUrl}
+          effect="blur"
+          style={{
+            objectFit: "cover",
+            marginTop: "1rem",
+            borderRadius: "0.8rem",
+            width: "100%",
+            height: "auto",
+          }}
+        />
+      )}
       <p style={{ textAlign: "left" }}>
         <span style={{ fontWeight: "bold", marginRight: "0.5rem" }}>
           {user?.username}
