@@ -1,19 +1,12 @@
 import { Avatar } from ".";
-import { useState } from "react";
-import { HiOutlineDotsCircleHorizontal } from "react-icons/hi";
 import { AiFillHeart } from "react-icons/ai";
 import { AiOutlineHeart } from "react-icons/ai";
-import { TiArrowForwardOutline } from "react-icons/ti";
 import { RiChat3Line } from "react-icons/ri";
-import { AiFillCloseCircle } from "react-icons/ai";
 import { BsArrowRight } from "react-icons/bs";
-import Modal from "react-modal";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
-import { unstable_renderSubtreeIntoContainer } from "react-dom";
-import { useEffect } from "react";
 import { likeDislikePost } from "../features/post/PostSlice";
 import FlexBox from "./FlexBox";
 import { defaultProfilePicture } from "../utils/utils";

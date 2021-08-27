@@ -110,7 +110,7 @@ const PostPage = () => {
         </CommentsWrapper>
       </PostPageWrapper>
       <CommentInputWrapper>
-        <div style={{ position: "relative", width: "85%", margin: "auto" }}>
+        <CommentsInputDiv>
           <form action="" onSubmit={handleCommentSubmit}>
             <CommentInput
               onChange={handleInputChange}
@@ -121,9 +121,9 @@ const PostPage = () => {
               type="submit"
               style={{
                 position: "absolute",
-                right: "5%",
+                right: "6%",
                 color: "#7C37A6",
-                top: "20%",
+                top: "24%",
                 fontWeight: "600",
                 border: "none",
                 background: "transparent",
@@ -132,12 +132,7 @@ const PostPage = () => {
               Post
             </button>
           </form>
-        </div>
-        {/* <input
-          type="text"
-          placeholder="Comment"
-          style={{ width: "90%", margin: "auto" }}
-        /> */}
+        </CommentsInputDiv>
         <div ref={commentsEndRef} />
       </CommentInputWrapper>
     </div>
@@ -158,27 +153,53 @@ const postBtn = styled.div`
 `;
 
 const CommentsWrapper = styled.div`
-  width: 90%;
+  width: 100%;
   margin-top: auto;
   padding: 5%;
   margin-bottom: 2rem;
+  @media (min-width: 725px) {
+    width: 60%;
+  }
+  @media (min-width: 900px) {
+    width: 50%;
+  }
+`;
+const CommentsInputDiv = styled.div`
+  position: relative;
+  width: 90%;
+  margin: auto;
+  @media (min-width: 725px) {
+    width: 100%;
+  }
+  @media (min-width: 900px) {
+    width: 100%;
+  }
 `;
 const CommentInput = styled.input`
-  width: 100%;
-  /* left: 5%; */
-  padding-left: 2.5%;
-  padding-right: 2.5%;
+  width: 90%;
   border: black solid 1px;
-  border-radius: 3rem;
+  border-radius: 0.4rem;
   height: 2rem;
   outline: unset;
   bottom: 2rem;
   /* position: absolute; */
+  ::-webkit-input-placeholder {
+    padding-left: 1rem;
+  }
+  :-moz-placeholder {
+    padding-left: 1rem;
+  }
+  ::-moz-placeholder {
+    padding-left: 1rem;
+  }
+  :-ms-input-placeholder {
+    padding-left: 1rem;
+  }
 `;
 const CommentInputWrapper = styled.div`
   position: fixed;
   bottom: 0;
-  width: 90%;
+  width: 100%;
   height: 3rem;
   background: transparent;
   margin: "auto";
