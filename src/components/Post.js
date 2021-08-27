@@ -26,25 +26,16 @@ const Post = ({
 }) => {
   const dispatch = useDispatch();
   const postState = useSelector((state) => state.post);
+  const userState = useSelector((state) => state.user);
 
-  const filteredLikedArray = postState?.post?.likes?.filter(
-    (like) => like?.user?._id === user?._id
+  const index = likes?.findIndex(
+    (like) => like?.user?._id === userState?.user?._id
   );
 
   const handleLikeToggle = () => {
     dispatch(likeDislikePost({ likeableId: _id, type: "Post" }));
   };
 
-  // function checkIsLiked() {
-  //   var i;
-  //   for (i = 0; i < likes.length; i++) {
-  //     if (likes[i] === user._id) {
-  //       return true;
-  //     }
-  //   }
-
-  //   return false;
-  // }
   return (
     <div>
       {<Loader loaded={!postState.loading} options={loaderOptions} />}
@@ -76,6 +67,8 @@ const Post = ({
             borderRadius: "0.8rem",
             width: "100%",
             height: "auto",
+            // boxShadow: "rgba(17, 12, 46, 0.15) 0px 48px 100px 0px",
+            boxShadow: "rgba(0, 0, 0, 0.30) 0px 22px 70px 4px",
           }}
         />
       )}
@@ -110,7 +103,8 @@ const Post = ({
       ) : (
         <ReactiontWrapper>
           <ReactiontItemWrapper>
-            {postState.isPostLiked ? (
+            {/* index !== -1 */}
+            {index !== -1 ? (
               <AiFillHeart
                 style={{ marginRight: "0.5rem", cursor: "pointer" }}
                 size={20}
@@ -119,7 +113,7 @@ const Post = ({
               />
             ) : (
               <AiOutlineHeart
-                style={{ marginRight: "0.5rem" }}
+                style={{ marginRight: "0.5rem", cursor: "pointer" }}
                 size={20}
                 onClick={handleLikeToggle}
               />
@@ -127,8 +121,19 @@ const Post = ({
             <div style={{ cursor: "pointer" }}>{likes?.length}</div>
           </ReactiontItemWrapper>
           <ReactiontItemWrapper>
-            <RiChat3Line style={{ marginRight: "0.5rem" }} size={20} />
-            <div>{comments?.length}</div>
+            <Link
+              to={`/post-page/${_id}`}
+              style={{
+                display: "flex",
+                textDecoration: "none",
+                color: "black",
+                cursor: "pointer",
+              }}
+              params={{ postId: _id }}
+            >
+              <RiChat3Line style={{ marginRight: "0.5rem" }} size={20} />
+              <div>{comments?.length}</div>
+            </Link>
           </ReactiontItemWrapper>
         </ReactiontWrapper>
       )}

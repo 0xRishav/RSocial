@@ -199,7 +199,11 @@ export const postSlice = createSlice({
       state.loading = true;
     },
     [likeDislikePost.fulfilled]: (state, { payload }) => {
-      state.post = payload.post;
+      const index = state.feed.findIndex(
+        (post) => post._id === payload.post._id
+      );
+      console.log("post", payload.post);
+      state.feed[index] = payload.post;
       state.isPostLiked = payload.isPostLiked;
       state.loading = false;
     },

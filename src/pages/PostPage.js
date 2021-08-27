@@ -22,6 +22,8 @@ const PostPage = () => {
 
   const { post, loading } = useSelector((state) => state.post);
 
+  console.log(post);
+
   const dispatch = useDispatch();
   const { postId } = useParams();
 

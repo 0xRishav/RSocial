@@ -16,6 +16,7 @@ const Feed = () => {
   useEffect(() => {
     dispatch(fetchAllPosts());
   }, []);
+  console.log("feed", feed);
   return (
     <div style={{ width: "100%" }}>
       {<Loader loaded={!loading} options={loaderOptions} />}
@@ -29,7 +30,7 @@ const Feed = () => {
 
       <Story />
       {feed.map((post, index) => (
-        <Post key={index} {...post} user={post.user} onHomePage />
+        <Post key={index} {...post} user={post.user} />
       ))}
       <div style={{ marginBottom: "5rem" }} />
       {width < 725 && <BottomButtons />}
