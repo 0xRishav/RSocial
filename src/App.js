@@ -38,7 +38,7 @@ function App() {
   return (
     <div className="App">
       <Switch>
-        <Route exact path="/profile/:userId" component={Profile} />
+        <PrivateRoute exact path="/profile/:userId" component={Profile} />
         <PrivateRoute exact path="/post-page/:postId" component={PostPage} />
         <Route exact path="/">
           {accessToken ? <Redirect to="/feed" /> : <Landing />}

@@ -4,6 +4,10 @@ import Loader from "react-loader";
 import { loaderOptions } from "../utils/utils";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
+import { AiOutlineHeart } from "react-icons/ai";
+import { RiChat3Line } from "react-icons/ri";
+import { FlexBox } from ".";
+import { Link } from "react-router-dom";
 
 const PostsGrid = ({ postsType }) => {
   const { feed, userPosts, loading } = useSelector((state) => state.post);
@@ -12,29 +16,48 @@ const PostsGrid = ({ postsType }) => {
     <>
       {<Loader loaded={!loading} options={loaderOptions} />}
       <PostList>
-        {(postsType === "User" ? userPosts : feed).map((image, i) => (
-          <Post key={i}>
-            <PostImageFigure>
-              <LazyLoadImage
-                src={image.photoUrl}
-                alt="postPic"
-                effect="blur"
-                style={{
-                  verticalAlign: "top",
-                  objectFit: "cover",
-                  height: "100%",
-                  width: "100%",
-                }}
-              />
-            </PostImageFigure>
-            <PostOverlay>
-              <p>
-                <PostLike>{image?.likes?.length}</PostLike>
-                <PostComment>{image?.comments?.length}</PostComment>
-              </p>
-            </PostOverlay>
-          </Post>
-        ))}
+        {(postsType === "User" ? userPosts : feed).map(
+          (image, i) =>
+            image.photoUrl && (
+              <Link to={`/post-page/${image._id}`} key={image._id}>
+                <Post key={i}>
+                  <PostImageFigure>
+                    <LazyLoadImage
+                      src={image.photoUrl}
+                      alt="postPic"
+                      effect="blur"
+                      style={{
+                        verticalAlign: "top",
+                        objectFit: "cover",
+                        height: "100%",
+                        width: "100%",
+                      }}
+                    />
+                  </PostImageFigure>
+                  <PostOverlay>
+                    <p>
+                      <FlexBox
+                        flexDirection="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                      >
+                        <AiOutlineHeart />
+                        <PostLike>{image?.likes?.length}</PostLike>
+                      </FlexBox>
+                      <FlexBox
+                        flexDirection="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                      >
+                        <RiChat3Line />
+                        <PostComment>{image?.comments?.length}</PostComment>
+                      </FlexBox>
+                    </p>
+                  </PostOverlay>
+                </Post>
+              </Link>
+            )
+        )}
       </PostList>
     </>
   );

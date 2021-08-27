@@ -36,7 +36,6 @@ const Search = () => {
 
   return (
     <div>
-      {<Loader loaded={!loading} options={loaderOptions} />}
       {width > 725 && <Navbar />}
       <SearchWrapper>
         <RiSearch2Line

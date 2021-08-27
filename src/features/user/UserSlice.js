@@ -134,6 +134,9 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     logoutUser: () => {
+      localStorage.removeItem("user");
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
       return {
         user: {},
         accessToken: "",
