@@ -12,17 +12,21 @@ import Loader from "react-loader";
 import { loaderOptions } from "../utils/utils";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
+import ErrorBox from "../components/Error";
 
 const Signin = () => {
   const [formData, setFormData] = useState({
     emailOrUsername: "",
     password: "",
   });
+  const { user, errMessage } = useSelector((state) => state.user);
   const [isFormEmpty, setIsFormEmpty] = useState(true);
   const dispatch = useDispatch();
   const history = useHistory();
   const [loading, setLoading] = useState(false);
   console.log(AuthPageSvg);
+
+  console.log("errMessage", errMessage);
 
   function ValidateEmail(email) {
     if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
@@ -66,10 +70,12 @@ const Signin = () => {
       setLoading(false);
       history.push("/");
     }
+    setLoading(false);
   };
 
   return (
     <div>
+      {errMessage && <ErrorBox message={errMessage} delay="5000" />}
       {<Loader loaded={!loading} options={loaderOptions} />}
       <NavDiv>
         <Logo />

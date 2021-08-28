@@ -9,14 +9,18 @@ const initialState = {
   refreshToken: null,
   error: "",
   loading: false,
-  errMessage: "",
+  errMessage: null,
 };
 
 export const signinUser = createAsyncThunk(
   "user/signinUser",
-  async (userDetails) => {
+  async (
+    userDetails,
+    { dispatch, getState, rejectWithValue, fulfillWithValue }
+  ) => {
     try {
       const response = await userApi.login(userDetails);
+      console.log("RESPONSE", response);
       if (response.status === 200) {
         return {
           user: response.data.data.user,
@@ -24,12 +28,14 @@ export const signinUser = createAsyncThunk(
           refreshToken: response.data.data.refreshToken,
         };
       } else {
-        return {
-          message: response.message,
-        };
+        return rejectWithValue({
+          errMessage: response.data.message,
+        });
       }
     } catch (error) {
-      console.log(error);
+      return rejectWithValue({
+        errMessage: error.response.data.message,
+      });
     }
   }
 );
@@ -145,6 +151,9 @@ const userSlice = createSlice({
         loading: false,
       };
     },
+    setErrorNull: (state) => {
+      state.errMessage = null;
+    },
     setUserFromLocalStorage: (state, action) => {
       let user;
       const jsonUser = localStorage.getItem("user");
@@ -161,6 +170,10 @@ const userSlice = createSlice({
     },
   },
   extraReducers: {
+    [signinUser.rejected]: (state, action) => {
+      state.loading = false;
+      state.errMessage = action.payload.errMessage;
+    },
     [signinUser.fulfilled]: (state, action) => {
       state.user = action.payload.user;
       localStorage.setItem("user", JSON.stringify(action.payload.user));
@@ -172,10 +185,7 @@ const userSlice = createSlice({
       state.loading = false;
       state.new = "anything";
     },
-    [signinUser.rejected]: (state, action) => {
-      state.loading = false;
-      state.errMessage = action.payload.message;
-    },
+
     [signinUser.pending]: (state, action) => {
       state.loading = true;
     },
@@ -250,6 +260,7 @@ const userSlice = createSlice({
   },
 });
 
-export const { logoutUser, setUserFromLocalStorage } = userSlice.actions;
+export const { setErrorNull, logoutUser, setUserFromLocalStorage } =
+  userSlice.actions;
 
 export default userSlice.reducer;

@@ -30,6 +30,7 @@ const PostsGrid = ({ postsType }) => {
                         verticalAlign: "top",
                         objectFit: "cover",
                         height: "100%",
+                        minHeight: "100px",
                         width: "100%",
                       }}
                     />
@@ -65,7 +66,7 @@ const PostsGrid = ({ postsType }) => {
 
 const PostList = styled.section`
   display: grid;
-  grid-template-columns: repeat(3, minmax(100px, 293px));
+  grid-template-columns: repeat(2, minmax(100px, 293px));
   justify-content: center;
   grid-gap: 28px;
   margin-bottom: 6rem;
