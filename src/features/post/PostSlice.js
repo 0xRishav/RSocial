@@ -9,12 +9,12 @@ const initialState = {
   photoUrl: "",
   photoPublicId: "",
   loading: false,
-  error: "",
+  errMessage: null,
 };
 
 export const uploadPostPhoto = createAsyncThunk(
   "post/uploadPostPhoto",
-  async (file) => {
+  async (file, { rejectWithValue }) => {
     try {
       const formData = new FormData();
       formData.append("image", file, file.name);
@@ -24,83 +24,109 @@ export const uploadPostPhoto = createAsyncThunk(
           url: response.data.data.url,
           public_id: response.data.data.public_id,
         };
+      } else {
+        return rejectWithValue({
+          errMessage: response.data.message,
+        });
       }
     } catch (error) {
-      return {
-        error,
-      };
+      return rejectWithValue({
+        errMessage: error.response.data.message,
+      });
     }
   }
 );
 
-export const createPost = createAsyncThunk("post/createPost", async (body) => {
-  try {
-    const response = await postApi.createPost(body);
-    if (response.status === 200) {
-      return {
-        post: response.data.post,
-      };
+export const createPost = createAsyncThunk(
+  "post/createPost",
+  async (body, { rejectWithValue }) => {
+    try {
+      const response = await postApi.createPost(body);
+      if (response.status === 200) {
+        return {
+          post: response.data.post,
+        };
+      } else {
+        return rejectWithValue({
+          errMessage: response.data.message,
+        });
+      }
+    } catch (error) {
+      return rejectWithValue({
+        errMessage: error.response.data.message,
+      });
     }
-  } catch (error) {
-    return {
-      error,
-    };
   }
-});
+);
 
 export const fetchAllPosts = createAsyncThunk(
   "post/fetchAllPosts",
-  async () => {
+  async (_, { rejectWithValue }) => {
     try {
       const response = await postApi.fetchALlPosts();
       if (response.status === 200) {
         return {
           feed: response.data.data.posts,
         };
+      } else {
+        return rejectWithValue({
+          errMessage: response.data.message,
+        });
       }
     } catch (error) {
-      return {
-        error,
-      };
+      return rejectWithValue({
+        errMessage: error.response.data.message,
+      });
     }
   }
 );
 
 export const fetchUserPosts = createAsyncThunk(
   "post/fetchUserPosts",
-  async () => {
+  async (_, { rejectWithValue }) => {
     try {
       const response = await postApi.fetchUserPosts();
       if (response.status === 200) {
-        return {
-          feed: response.data.data.posts,
-        };
+        return rejectWithValue({
+          errMessage: response.data.message,
+        });
+      } else {
+        return rejectWithValue({
+          errMessage: response.data.message,
+        });
       }
     } catch (error) {
-      return {
-        error,
-      };
+      return rejectWithValue({
+        errMessage: error.response.data.message,
+      });
     }
   }
 );
-export const fetchPost = createAsyncThunk("post/fetchPost", async (body) => {
-  try {
-    const response = await postApi.fetchPost(body);
-    if (response.status === 200) {
-      return {
-        post: response.data.data.populatedPost,
-        isPostLiked: response.data.data.isPostLiked,
-      };
+export const fetchPost = createAsyncThunk(
+  "post/fetchPost",
+  async (body, { rejectWithValue }) => {
+    try {
+      const response = await postApi.fetchPost(body);
+      if (response.status === 200) {
+        return {
+          post: response.data.data.populatedPost,
+          isPostLiked: response.data.data.isPostLiked,
+        };
+      } else {
+        return rejectWithValue({
+          errMessage: response.data.message,
+        });
+      }
+    } catch (error) {
+      return rejectWithValue({
+        errMessage: error.response.data.message,
+      });
     }
-  } catch (error) {
-    return {
-      error,
-    };
   }
-});
+);
 export const likeDislikePost = createAsyncThunk(
   "post/likeDislikePost",
-  async (body) => {
+  async (body, { rejectWithValue }) => {
     try {
       const response = await postApi.likeDislikePost(body);
       if (response.status === 200) {
@@ -108,17 +134,21 @@ export const likeDislikePost = createAsyncThunk(
           post: response.data.data.post,
           isPostLiked: response.data.data.isPostLiked,
         };
+      } else {
+        return rejectWithValue({
+          errMessage: response.data.message,
+        });
       }
     } catch (error) {
-      return {
-        error,
-      };
+      return rejectWithValue({
+        errMessage: error.response.data.message,
+      });
     }
   }
 );
 export const createComment = createAsyncThunk(
   "post/createComment",
-  async (body) => {
+  async (body, { rejectWithValue }) => {
     try {
       const response = await postApi.createComment(body);
       if (response.status === 200) {
@@ -126,11 +156,38 @@ export const createComment = createAsyncThunk(
           newPost: response.data.data.newPost,
           newComments: response.data.data.comments,
         };
+      } else {
+        return rejectWithValue({
+          errMessage: response.data.message,
+        });
       }
     } catch (error) {
-      return {
-        error,
-      };
+      return rejectWithValue({
+        errMessage: error.response.data.message,
+      });
+    }
+  }
+);
+
+export const deletePost = createAsyncThunk(
+  "post/deletePost",
+  async (body, { rejectWithValue }) => {
+    try {
+      const response = await postApi.deletePost(body);
+      if (response.status === 200) {
+        return {
+          postDeleted: true,
+          postId: body.postId,
+        };
+      } else {
+        return rejectWithValue({
+          errMessage: response.data.message,
+        });
+      }
+    } catch (error) {
+      return rejectWithValue({
+        errMessage: error.response.data.message,
+      });
     }
   }
 );
@@ -138,7 +195,11 @@ export const createComment = createAsyncThunk(
 export const postSlice = createSlice({
   name: "post",
   initialState,
-  reducers: {},
+  reducers: {
+    setPostErrorNull: (state) => {
+      state.errMessage = null;
+    },
+  },
   extraReducers: {
     [uploadPostPhoto.fulfilled]: (state, { payload }) => {
       state.photoUrl = payload.photoUrl;
@@ -147,7 +208,7 @@ export const postSlice = createSlice({
     },
     [uploadPostPhoto.rejected]: (state, { payload }) => {
       state.loading = false;
-      state.error = payload.error;
+      state.errMessage = payload.errMessage;
     },
     [uploadPostPhoto.pending]: (state, { payload }) => {
       state.loading = true;
@@ -158,7 +219,7 @@ export const postSlice = createSlice({
     },
     [createPost.rejected]: (state, { payload }) => {
       state.loading = false;
-      state.error = payload.error;
+      state.errMessage = payload.errMessage;
     },
     [createPost.pending]: (state, { payload }) => {
       state.loading = true;
@@ -170,7 +231,7 @@ export const postSlice = createSlice({
     },
     [fetchAllPosts.rejected]: (state, { payload }) => {
       state.loading = false;
-      state.error = payload.error;
+      state.errMessage = payload.errMessage;
     },
     [fetchAllPosts.pending]: (state, { payload }) => {
       state.loading = true;
@@ -181,7 +242,7 @@ export const postSlice = createSlice({
     },
     [fetchUserPosts.rejected]: (state, { payload }) => {
       state.loading = false;
-      state.error = payload.error;
+      state.errMessage = payload.errMessage;
     },
     [fetchUserPosts.pending]: (state, { payload }) => {
       state.loading = true;
@@ -193,7 +254,7 @@ export const postSlice = createSlice({
     },
     [fetchPost.rejected]: (state, { payload }) => {
       state.loading = false;
-      state.error = payload.error;
+      state.errMessage = payload.errMessage;
     },
     [fetchPost.pending]: (state, { payload }) => {
       state.loading = true;
@@ -209,7 +270,7 @@ export const postSlice = createSlice({
     },
     [likeDislikePost.rejected]: (state, { payload }) => {
       state.loading = false;
-      state.error = payload.error;
+      state.errMessage = payload.errMessage;
     },
     [likeDislikePost.pending]: (state, { payload }) => {
       state.loading = true;
@@ -220,12 +281,30 @@ export const postSlice = createSlice({
     },
     [createComment.rejected]: (state, { payload }) => {
       state.loading = false;
-      state.error = payload.error;
+      state.errMessage = payload.errMessage;
     },
     [createComment.pending]: (state, { payload }) => {
+      state.loading = true;
+    },
+    [deletePost.fulfilled]: (state, { payload }) => {
+      if (payload.postDeleted) {
+        const index = state.feed.findIndex(
+          (post) => post._id === payload.post._id
+        );
+        state.feed.splice(index, 1);
+      }
+
+      state.loading = false;
+    },
+    [deletePost.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.errMessage = payload.errMessage;
+    },
+    [deletePost.pending]: (state, { payload }) => {
       state.loading = true;
     },
   },
 });
 
+export const { setPostErrorNull } = postSlice.actions;
 export default postSlice.reducer;

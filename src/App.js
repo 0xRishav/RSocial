@@ -75,6 +75,7 @@ function App() {
 
 const AppWrapper = styled.div`
   width: 90%;
+  padding-bottom: 2rem;
   /* position: relative; */
   margin: auto;
   @media (min-width: 725px) {

@@ -9,6 +9,7 @@ import { signupUser } from "../features/user/UserSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { loaderOptions } from "../utils/utils";
 import Loader from "react-loader";
+import ErrorBox from "../components/Error";
 
 const Signup = () => {
   const history = useHistory();
@@ -80,6 +81,9 @@ const Signup = () => {
   };
   return (
     <div>
+      {authState.errMessage && (
+        <ErrorBox message={authState.errMessage} delay="5000" />
+      )}
       {<Loader loaded={!authState.loading} options={loaderOptions} />}
       <NavDiv>
         <Logo />

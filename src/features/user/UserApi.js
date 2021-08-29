@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const baseUrl = "https://rsocial-api.herokuapp.com/user";
-// "http://localhost:4000/user";
+// const baseUrl = "http://localhost:4000/user";
 
 axios.interceptors.request.use(
   (config) => {

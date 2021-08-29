@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import { setErrorNull } from "../features/user/UserSlice";
+import { setUserErrorNull } from "../features/user/UserSlice";
+import { setStoryErrorNull } from "../features/story/StorySlice";
+import { setPostErrorNull } from "../features/post/PostSlice";
 
 const ErrorBox = ({ message, delay }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     let compTimer = setTimeout(() => {
-      dispatch(setErrorNull());
+      dispatch(setUserErrorNull());
+      dispatch(setStoryErrorNull());
+      dispatch(setPostErrorNull());
     }, delay);
     return () => {
       clearTimeout(compTimer);

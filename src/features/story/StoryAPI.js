@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const baseUrl = "https://rsocial-api.herokuapp.com/story";
-
+// const baseUrl = "http://localhost:4000/story";
 export const storyApi = {
   fetchAllStories: async () => {
     return await axios.get(`${baseUrl}/all-stories`);

@@ -15,11 +15,12 @@ import { Link } from "react-router-dom";
 import useWindowDimensions from "../custom-hooks/useWindowDimensions";
 import Loader from "react-loader";
 import { defaultProfilePicture, loaderOptions } from "../utils/utils";
+import ErrorBox from "../components/Error";
 
 const Search = () => {
   const { width } = useWindowDimensions();
   const dispatch = useDispatch();
-  const { allUsers, loading } = useSelector((state) => state.user);
+  const { allUsers, loading, errMessage } = useSelector((state) => state.user);
   const [searchFilteredUsers, setSearchFilteredUsers] = useState([]);
   useEffect(() => {
     dispatch(fetchAllUsers());
@@ -36,6 +37,7 @@ const Search = () => {
 
   return (
     <div>
+      {errMessage && <ErrorBox message={errMessage} delay="5000" />}
       {width > 725 && <Navbar />}
       <SearchWrapper>
         <RiSearch2Line

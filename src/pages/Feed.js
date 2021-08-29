@@ -8,17 +8,18 @@ import { useSelector, useDispatch } from "react-redux";
 import useWindowDimensions from "../custom-hooks/useWindowDimensions";
 import { loaderOptions } from "../utils/utils";
 import Loader from "react-loader";
+import ErrorBox from "../components/Error";
 
 const Feed = () => {
   const { width } = useWindowDimensions();
   const dispatch = useDispatch();
-  const { feed, loading } = useSelector((state) => state.post);
+  const { feed, loading, errMessage } = useSelector((state) => state.post);
   useEffect(() => {
     dispatch(fetchAllPosts());
   }, []);
-  console.log("feed", feed);
   return (
     <div style={{ width: "100%" }}>
+      {errMessage && <ErrorBox message={errMessage} delay="5000" />}
       {<Loader loaded={!loading} options={loaderOptions} />}
       {width > 725 ? (
         <Navbar />

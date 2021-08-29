@@ -31,12 +31,12 @@ const Landing = () => {
               <Button primary={false} text="Sign Up" width="100%" />
             </Link>
           </Left>
-          {/* <Right>
+          <Right>
             <LandingSvg
               src={LandingPageSvg2}
               className="Tilt-inner"
             ></LandingSvg>
-          </Right> */}
+          </Right>
         </TwoColumnFlexWrapper>
       </LandingPageWrapper>
     </div>

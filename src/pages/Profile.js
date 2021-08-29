@@ -13,6 +13,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { StyledButton } from "../components/Button";
 import { logoutUser } from "../features/user/UserSlice";
+import ErrorBox from "../components/Error";
 
 const Profile = () => {
   const { width } = useWindowDimensions();
@@ -36,6 +37,7 @@ const Profile = () => {
 
   return (
     <div>
+      {errMessage && <ErrorBox message={errMessage} delay="5000" />}
       <ProfileInfoWrapper>
         <LazyLoadImage
           src={
@@ -116,7 +118,7 @@ const Profile = () => {
         </ProfileWrapper>
       </ProfileInfoWrapper>
       <ProfileWrapper>
-        <h3 style={{ marginTop: "4rem" }}>Rishav Bharti</h3>
+        <h3 style={{ marginTop: "4rem" }}>{fetchedUser.name}</h3>
         {/* <FlexBox>
           <FlexBox
             flexDirection="column"

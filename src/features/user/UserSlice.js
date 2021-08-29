@@ -14,10 +14,7 @@ const initialState = {
 
 export const signinUser = createAsyncThunk(
   "user/signinUser",
-  async (
-    userDetails,
-    { dispatch, getState, rejectWithValue, fulfillWithValue }
-  ) => {
+  async (userDetails, { rejectWithValue }) => {
     try {
       const response = await userApi.login(userDetails);
       console.log("RESPONSE", response);
@@ -42,7 +39,7 @@ export const signinUser = createAsyncThunk(
 
 export const signupUser = createAsyncThunk(
   "user/signupUser",
-  async (userDetails) => {
+  async (userDetails, { rejectWithValue }) => {
     try {
       const response = await userApi.signup(userDetails);
       if (response.status === 200) {
@@ -52,19 +49,21 @@ export const signupUser = createAsyncThunk(
           refreshToken: response.data.data.refreshToken,
         };
       } else {
-        return {
-          message: response.message,
-        };
+        return rejectWithValue({
+          errMessage: response.data.message,
+        });
       }
     } catch (error) {
-      console.log(error);
+      return rejectWithValue({
+        errMessage: error.response.data.message,
+      });
     }
   }
 );
 
 export const uploadProfilePicture = createAsyncThunk(
   "user/uploadProfilePicture",
-  async (file) => {
+  async (file, { rejectWithValue }) => {
     try {
       const formData = new FormData();
       formData.append("image", file, file.name);
@@ -74,17 +73,21 @@ export const uploadProfilePicture = createAsyncThunk(
           user: response.data.data.user,
         };
       } else {
-        return { message: response.message };
+        return rejectWithValue({
+          errMessage: response.data.message,
+        });
       }
     } catch (error) {
-      console.log(error);
+      return rejectWithValue({
+        errMessage: error.response.data.message,
+      });
     }
   }
 );
 
 export const uploadCoverPicture = createAsyncThunk(
   "user/uploadCoverPicture",
-  async (file) => {
+  async (file, { rejectWithValue }) => {
     try {
       const formData = new FormData();
       formData.append("image", file, file.name);
@@ -94,16 +97,20 @@ export const uploadCoverPicture = createAsyncThunk(
           user: response.data.data.user,
         };
       } else {
-        console.log(response);
+        return rejectWithValue({
+          errMessage: response.data.message,
+        });
       }
     } catch (error) {
-      console.log(error);
+      return rejectWithValue({
+        errMessage: error.response.data.message,
+      });
     }
   }
 );
 export const fetchAllUsers = createAsyncThunk(
   "user/fetchAllUsers",
-  async () => {
+  async (_, { rejectWithValue }) => {
     try {
       const response = await userApi.fetchAllUsers();
       if (response.status === 200) {
@@ -111,16 +118,20 @@ export const fetchAllUsers = createAsyncThunk(
           allUsers: response.data.data.allUsers,
         };
       } else {
-        console.log(response);
+        return rejectWithValue({
+          errMessage: response.data.message,
+        });
       }
     } catch (error) {
-      console.log(error);
+      return rejectWithValue({
+        errMessage: error.response.data.message,
+      });
     }
   }
 );
 export const fetchParticularUser = createAsyncThunk(
   "user/fetchParticularUser",
-  async (userId) => {
+  async (userId, { rejectWithValue }) => {
     try {
       const response = await userApi.fetchParticularUser(userId);
       if (response.status === 200) {
@@ -128,9 +139,14 @@ export const fetchParticularUser = createAsyncThunk(
           fetchedUser: response.data.data.user,
         };
       } else {
+        return rejectWithValue({
+          errMessage: response.data.message,
+        });
       }
     } catch (error) {
-      console.log(error);
+      return rejectWithValue({
+        errMessage: error.response.data.message,
+      });
     }
   }
 );
@@ -151,7 +167,7 @@ const userSlice = createSlice({
         loading: false,
       };
     },
-    setErrorNull: (state) => {
+    setUserErrorNull: (state) => {
       state.errMessage = null;
     },
     setUserFromLocalStorage: (state, action) => {
@@ -203,7 +219,7 @@ const userSlice = createSlice({
     },
     [signupUser.rejected]: (state, action) => {
       state.loading = false;
-      state.errMessage = action.payload.message;
+      state.errMessage = action.payload.errMessage;
     },
     [signupUser.pending]: (state, action) => {
       state.loading = true;
@@ -217,7 +233,7 @@ const userSlice = createSlice({
     },
     [uploadProfilePicture.rejected]: (state, action) => {
       state.loading = false;
-      state.errMessage = action.payload.message;
+      state.errMessage = action.payload.errMessage;
     },
     [uploadProfilePicture.pending]: (state, action) => {
       state.loading = true;
@@ -230,7 +246,7 @@ const userSlice = createSlice({
     },
     [uploadCoverPicture.rejected]: (state, action) => {
       state.loading = false;
-      state.errMessage = action.payload.message;
+      state.errMessage = action.payload.errMessage;
     },
     [uploadCoverPicture.pending]: (state, action) => {
       state.loading = true;
@@ -241,7 +257,7 @@ const userSlice = createSlice({
     },
     [fetchAllUsers.rejected]: (state, action) => {
       state.loading = false;
-      state.errMessage = action.payload.message;
+      state.errMessage = action.payload.errMessage;
     },
     [fetchAllUsers.pending]: (state, action) => {
       state.loading = true;
@@ -252,7 +268,7 @@ const userSlice = createSlice({
     },
     [fetchParticularUser.rejected]: (state, action) => {
       state.loading = false;
-      state.errMessage = action.payload.message;
+      state.errMessage = action.payload.errMessage;
     },
     [fetchParticularUser.pending]: (state, action) => {
       state.loading = true;
@@ -260,7 +276,7 @@ const userSlice = createSlice({
   },
 });
 
-export const { setErrorNull, logoutUser, setUserFromLocalStorage } =
+export const { setUserErrorNull, logoutUser, setUserFromLocalStorage } =
   userSlice.actions;
 
 export default userSlice.reducer;

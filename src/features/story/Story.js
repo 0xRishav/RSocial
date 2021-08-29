@@ -92,7 +92,7 @@ const Story = () => {
                   style={{
                     borderColor: "#7C37A6",
                     borderWidth: "0.3rem",
-                    borderRadius: "100%",
+                    borderRadius: "30%",
                     borderStyle: "solid",
                   }}
                   onClick={() => setCurrentStory(story)}
@@ -123,7 +123,7 @@ const Story = () => {
                   style={{
                     borderColor: "#7C37A6",
                     borderWidth: "0.3rem",
-                    borderRadius: "100%",
+                    borderRadius: "30%",
                     borderStyle: "solid",
                   }}
                   onClick={() => setCurrentStory(story)}

@@ -3,7 +3,7 @@ import { StyledButton } from "../components/Button";
 import { FcImageFile } from "react-icons/fc";
 import { MdBlock } from "react-icons/md";
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import { useState } from "react";
 import { uploadPostPhoto, createPost } from "../features/post/PostSlice";
@@ -13,6 +13,7 @@ import Loader from "react-loader";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import Compressor from "compressorjs";
+import ErrorBox from "../components/Error";
 
 const CreatePost = () => {
   const history = useHistory();
@@ -21,6 +22,7 @@ const CreatePost = () => {
   const [fileState, setFileState] = useState(null);
   const [file, setFile] = useState(null);
   const [isPictureUploaded, setIsPictureUploaded] = useState(false);
+  const { errMessage } = useSelector((state) => state.post);
   const [postInfo, setPostInfo] = useState({
     caption: "",
     url: "",
@@ -124,6 +126,7 @@ const CreatePost = () => {
 
   return (
     <div>
+      {errMessage && <ErrorBox message={errMessage} delay="5000" />}
       {<Loader loaded={!loading} options={loaderOptions} />}
       {width > 725 && <Navbar />}
       <h1>Create Post</h1>

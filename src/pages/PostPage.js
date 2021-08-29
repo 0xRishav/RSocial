@@ -2,25 +2,20 @@ import styled from "styled-components";
 import { Avatar, Post, FlexBox } from "../components";
 import { BsArrowLeft } from "react-icons/bs";
 import { useEffect, useState, useRef } from "react";
-import {
-  fetchPost,
-  createComment,
-  fetchAllPosts,
-} from "../features/post/PostSlice";
+import { fetchPost, createComment } from "../features/post/PostSlice";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { useDispatch } from "react-redux";
 import Loader from "react-loader";
 import { useHistory } from "react-router";
-import { fetchParticularUser } from "../features/user/UserSlice";
 import { defaultProfilePicture, loaderOptions } from "../utils/utils";
+import ErrorBox from "../components/Error";
 
 const PostPage = () => {
-  const [postComments, setPostComments] = useState([]);
-  const commentsEndRef = useRef(null);
+  // const commentsEndRef = useRef(null);
   const history = useHistory();
 
-  const { post, loading } = useSelector((state) => state.post);
+  const { post, loading, errMessage } = useSelector((state) => state.post);
 
   console.log(post);
 
@@ -43,14 +38,15 @@ const PostPage = () => {
     dispatch(createComment({ postId: postId, comment: commentInput }));
   };
 
-  const scrollToBottom = () => {
-    commentsEndRef.current.scrollIntoView({ behavior: "smooth" });
-  };
+  // const scrollToBottom = () => {
+  //   commentsEndRef.current.scrollIntoView({ behavior: "smooth" });
+  // };
 
-  useEffect(scrollToBottom, [postComments]);
+  // useEffect(scrollToBottom, [post.comments]);
 
   return (
     <div>
+      {errMessage && <ErrorBox message={errMessage} delay="5000" />}
       {<Loader loaded={!loading} options={loaderOptions} />}
       <PostPageWrapper>
         <FlexBox
@@ -123,7 +119,7 @@ const PostPage = () => {
               type="submit"
               style={{
                 position: "absolute",
-                right: "6%",
+                right: "3%",
                 color: "#7C37A6",
                 top: "24%",
                 fontWeight: "600",
@@ -135,24 +131,11 @@ const PostPage = () => {
             </button>
           </form>
         </CommentsInputDiv>
-        <div ref={commentsEndRef} />
+        {/* <div ref={commentsEndRef} /> */}
       </CommentInputWrapper>
     </div>
   );
 };
-
-const inputPostWrapper = styled.div`
-  position: relative;
-  width: 90%;
-  margin: auto;
-`;
-
-const postBtn = styled.div`
-  position: absolute;
-  right: 0;
-  color: blue;
-  top: 50%;
-`;
 
 const CommentsWrapper = styled.div`
   width: 100%;
@@ -178,7 +161,7 @@ const CommentsInputDiv = styled.div`
   }
 `;
 const CommentInput = styled.input`
-  width: 90%;
+  width: 100%;
   border: black solid 1px;
   border-radius: 0.4rem;
   height: 2rem;
@@ -200,13 +183,13 @@ const CommentInput = styled.input`
 `;
 const CommentInputWrapper = styled.div`
   position: fixed;
-  bottom: 0;
-  width: 100%;
+  bottom: 2.5rem;
+  width: auto;
   height: 3rem;
   background: transparent;
-  margin: "auto";
-  left: 50%;
-  transform: translate(-50%, 0);
+  margin: auto;
+  left: 5%;
+  right: 5%;
 
   @media (min-width: 725px) {
     width: 60%;

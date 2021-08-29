@@ -77,12 +77,14 @@ const BottomButtons = () => {
   return (
     <FlexBox
       flexDirection="row"
-      justifyContent="space-between"
+      justifyContent="space-around"
       alignItems="center"
       style={{
         position: "fixed",
         bottom: "0rem",
-        width: "90%",
+        left: 0,
+        right: 0,
+        width: "auto",
         background: "white",
         paddingTop: "0.5rem",
         paddingBottom: "0.5rem",

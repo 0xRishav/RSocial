@@ -3,11 +3,12 @@ import { AiFillHeart } from "react-icons/ai";
 import { AiOutlineHeart } from "react-icons/ai";
 import { RiChat3Line } from "react-icons/ri";
 import { BsArrowRight } from "react-icons/bs";
+import { AiOutlineDelete } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import styled from "styled-components";
-import { likeDislikePost } from "../features/post/PostSlice";
+import { deletePost, likeDislikePost } from "../features/post/PostSlice";
 import FlexBox from "./FlexBox";
 import { defaultProfilePicture } from "../utils/utils";
 import { loaderOptions } from "../utils/utils";
@@ -32,9 +33,17 @@ const Post = ({
     (like) => like?.user?._id === userState?.user?._id
   );
 
+  // console.log(user._id);
+  console.log(userState.user._id);
+
   const handleLikeToggle = () => {
     dispatch(likeDislikePost({ likeableId: _id, type: "Post" }));
   };
+
+  // const handlePostDelete = () => {
+  //   const body = { postId: _id };
+  //   dispatch(deletePost(body));
+  // };
 
   return (
     <div>
@@ -102,39 +111,53 @@ const Post = ({
         </div>
       ) : (
         <ReactiontWrapper>
-          <ReactiontItemWrapper>
-            {/* index !== -1 */}
-            {index !== -1 ? (
-              <AiFillHeart
-                style={{ marginRight: "0.5rem", cursor: "pointer" }}
-                size={20}
-                color="red"
+          <FlexBox
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
+            style={{ width: "15%" }}
+          >
+            <ReactiontItemWrapper>
+              <LikeCommentDiv
                 onClick={handleLikeToggle}
-              />
-            ) : (
-              <AiOutlineHeart
-                style={{ marginRight: "0.5rem", cursor: "pointer" }}
-                size={20}
-                onClick={handleLikeToggle}
-              />
-            )}
-            <div style={{ cursor: "pointer" }}>{likes?.length}</div>
-          </ReactiontItemWrapper>
-          <ReactiontItemWrapper>
-            <Link
-              to={`/post-page/${_id}`}
-              style={{
-                display: "flex",
-                textDecoration: "none",
-                color: "black",
-                cursor: "pointer",
-              }}
-              params={{ postId: _id }}
-            >
-              <RiChat3Line style={{ marginRight: "0.5rem" }} size={20} />
-              <div>{comments?.length}</div>
-            </Link>
-          </ReactiontItemWrapper>
+                style={{ cursor: "pointer" }}
+              >
+                {index !== -1 ? (
+                  <AiFillHeart
+                    style={{ marginRight: "0.5rem", cursor: "pointer" }}
+                    size={20}
+                    color="red"
+                  />
+                ) : (
+                  <AiOutlineHeart
+                    style={{ marginRight: "0.5rem", cursor: "pointer" }}
+                    size={20}
+                  />
+                )}
+                <div style={{ cursor: "pointer" }}>{likes?.length}</div>
+              </LikeCommentDiv>
+            </ReactiontItemWrapper>
+            <LikeCommentDiv style={{ cursor: "pointer" }}>
+              <Link
+                to={`/post-page/${_id}`}
+                style={{
+                  display: "flex",
+                  textDecoration: "none",
+                  color: "black",
+                  cursor: "pointer",
+                }}
+                params={{ postId: _id }}
+              >
+                <RiChat3Line style={{ marginRight: "0.5rem" }} size={20} />
+                <div>{comments?.length}</div>
+              </Link>
+            </LikeCommentDiv>
+            <ReactiontItemWrapper></ReactiontItemWrapper>
+          </FlexBox>
+
+          {false && (
+            <AiOutlineDelete size={20} />
+          )}
         </ReactiontWrapper>
       )}
     </div>
@@ -153,6 +176,14 @@ const AuthorInfoWrapper = styled.div`
   align-items: flex-start;
 `;
 
+const LikeCommentDiv = styled.div`
+  padding: 0.5rem;
+  border-radius: 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 const PostImg = styled.img`
   object-fit: cover;
   width: 100%;
@@ -164,7 +195,7 @@ const PostImg = styled.img`
 const ReactiontWrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   margin-top: 1rem;
   width: 95%;
   margin: 1rem auto;
@@ -174,6 +205,7 @@ const ReactiontItemWrapper = styled.div`
   align-items: center;
   justify-content: flex-start;
   margin-right: 1.5rem;
+  width: 27%;
 `;
 
 const HorizonatalDivider = styled.div`

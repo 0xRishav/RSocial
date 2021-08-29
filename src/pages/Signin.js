@@ -107,6 +107,17 @@ const Signin = () => {
         >
           Sign In
         </StyledButton>
+        <StyledButton
+          onClick={() => {
+            dispatch(
+              signinUser({ email: "rshvbharti@gmail.com", password: "123456" })
+            );
+          }}
+          primary
+          style={{ width: "100%" }}
+        >
+          Use Demo Account
+        </StyledButton>
         <div style={{ fontSize: "0.8rem", margin: "1rem auto" }}>
           New to RSocial?
         </div>
