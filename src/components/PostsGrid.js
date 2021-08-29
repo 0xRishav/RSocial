@@ -9,14 +9,14 @@ import { RiChat3Line } from "react-icons/ri";
 import { FlexBox } from ".";
 import { Link } from "react-router-dom";
 
-const PostsGrid = ({ postsType }) => {
-  const { feed, userPosts, loading } = useSelector((state) => state.post);
+const PostsGrid = ({ postsType, userPosts }) => {
+  const { feed, loading } = useSelector((state) => state.post);
 
   return (
     <>
       {<Loader loaded={!loading} options={loaderOptions} />}
       <PostList>
-        {(postsType === "User" ? userPosts : feed).map(
+        {(postsType === "User" ? userPosts : feed)?.map(
           (image, i) =>
             image.photoUrl && (
               <Link to={`/post-page/${image._id}`} key={image._id}>

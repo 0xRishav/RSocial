@@ -3,8 +3,12 @@ import styled from "styled-components";
 import Tilt from "react-tilt";
 import { Button, Logo } from "../components";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { StyledButton } from "../components/Button";
+import { signinUser } from "../features/user/UserSlice";
 
 const Landing = () => {
+  const dispatch = useDispatch();
   return (
     <div>
       <LandingPageWrapper>
@@ -30,6 +34,20 @@ const Landing = () => {
             <Link style={{ marginLeft: "1rem" }} to="/signup">
               <Button primary={false} text="Sign Up" width="100%" />
             </Link>
+            <StyledButton
+              onClick={() => {
+                dispatch(
+                  signinUser({
+                    username: "demo",
+                    password: "123456",
+                  })
+                );
+              }}
+              primary
+              style={{ width: "100%" }}
+            >
+              Use Demo Account
+            </StyledButton>
           </Left>
           <Right>
             <LandingSvg

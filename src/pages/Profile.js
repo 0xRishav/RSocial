@@ -25,16 +25,17 @@ const Profile = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchParticularUser(userId));
-  }, []);
+  }, [userId]);
   const { fetchedUser, loading, errMessage, user } = useSelector(
     (state) => state.user
   );
   const postState = useSelector((state) => state.post);
   let index;
+  console.log(fetchedUser);
 
   useEffect(() => {
     dispatch(fetchUserPosts());
-  }, []);
+  }, [userId]);
 
   const signOutUser = () => {
     dispatch(logoutUser());
@@ -65,52 +66,42 @@ const Profile = () => {
             height: "30vh",
           }}
         />
-        {width > 725 ? (
-          <FlexBox
-            flexDirection="row"
-            justifyContent="space-between"
-            alignItems="center"
-            // style={{ width: "90%", margin: "auto" }}
-            style={{
-              position: "absolute",
-              top: "0rem",
-              width: "90%",
-              margin: "auto",
-              left: "3rem",
-            }}
-          >
-            <h2>{fetchedUser.username}</h2>
+        <ProfileWrapper>
+          {width > 725 ? (
+            <DesktopNavWrapper>
+              <h2>{fetchedUser.username}</h2>
+              <FlexBox
+                flexDirection="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <DesktopButtons />
+                <StyledButton primary onClick={signOutUser}>
+                  Sign Out
+                </StyledButton>
+              </FlexBox>
+            </DesktopNavWrapper>
+          ) : (
             <FlexBox
               flexDirection="row"
               justifyContent="space-between"
               alignItems="center"
+              style={{
+                position: "absolute",
+                top: "0rem",
+                width: "auto",
+                margin: "auto",
+                left: "5%",
+                right: "5%",
+              }}
             >
-              <DesktopButtons />
+              <h2>{fetchedUser.username}</h2>
               <StyledButton primary onClick={signOutUser}>
                 Sign Out
               </StyledButton>
             </FlexBox>
-          </FlexBox>
-        ) : (
-          <FlexBox
-            flexDirection="row"
-            justifyContent="space-between"
-            alignItems="center"
-            // style={{ width: "90%", margin: "auto" }}
-            style={{
-              position: "absolute",
-              top: "0rem",
-              width: "90%",
-              margin: "auto",
-              left: "5%",
-            }}
-          >
-            <h2>{fetchedUser.username}</h2>
-            <StyledButton primary onClick={signOutUser}>
-              Sign Out
-            </StyledButton>
-          </FlexBox>
-        )}
+          )}
+        </ProfileWrapper>
         <ProfileWrapper>
           <Avatar
             src={
@@ -177,7 +168,7 @@ const Profile = () => {
 
         <div style={{ marginTop: "1rem" }}>
           <h2 style={{ textAlign: "left" }}>Feed</h2>
-          <PostsGrid postsType="User" />
+          <PostsGrid postsType="User" userPosts={fetchedUser.posts}/>
           {postState.feed.length === 0 && <h1>0 Posts</h1>}
         </div>
       </ProfileWrapper>
@@ -197,5 +188,32 @@ const FollowHeading = styled.div`
 const ProfileWrapper = styled.div`
   width: 90%;
   margin: auto;
+  @media (min-width: 725px) {
+    width: 60%;
+  }
+  @media (min-width: 900px) {
+    width: 50%;
+  }
+`;
+
+const DesktopNavWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  width: auto;
+  margin: auto;
+  left: 5%;
+  right: 5%;
+  @media (min-width: 725px) {
+    left: 20%;
+    right: 15%;
+  }
+  @media (min-width: 900px) {
+    left: 25%;
+    right: 20%;
+  } ;
 `;
 export default Profile;
