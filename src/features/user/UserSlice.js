@@ -36,6 +36,50 @@ export const signinUser = createAsyncThunk(
     }
   }
 );
+export const follow = createAsyncThunk(
+  "user/follow",
+  async (body, { rejectWithValue }) => {
+    try {
+      const response = await userApi.follow(body);
+      console.log("RESPONSE", response);
+      if (response.status === 200) {
+        return {
+          user: response.data.data.newUser,
+        };
+      } else {
+        return rejectWithValue({
+          errMessage: response.data.message,
+        });
+      }
+    } catch (error) {
+      return rejectWithValue({
+        errMessage: error.response.data.message,
+      });
+    }
+  }
+);
+export const unfollow = createAsyncThunk(
+  "user/unfollow",
+  async (body, { rejectWithValue }) => {
+    try {
+      const response = await userApi.unfollow(body);
+      console.log("RESPONSE", response);
+      if (response.status === 200) {
+        return {
+          user: response.data.data.newUser,
+        };
+      } else {
+        return rejectWithValue({
+          errMessage: response.data.message,
+        });
+      }
+    } catch (error) {
+      return rejectWithValue({
+        errMessage: error.response.data.message,
+      });
+    }
+  }
+);
 
 export const signupUser = createAsyncThunk(
   "user/signupUser",
@@ -199,10 +243,38 @@ const userSlice = createSlice({
       localStorage.setItem("accessToken", action.payload.accessToken);
       localStorage.setItem("refreshToken", action.payload.refreshToken);
       state.loading = false;
-      state.new = "anything";
     },
 
     [signinUser.pending]: (state, action) => {
+      state.loading = true;
+    },
+
+    [follow.rejected]: (state, action) => {
+      state.loading = false;
+      state.errMessage = action.payload.errMessage;
+    },
+    [follow.fulfilled]: (state, action) => {
+      state.user = action.payload.user;
+      localStorage.setItem("user", JSON.stringify(action.payload.user));
+      state.userId = action.payload.user._id;
+      state.loading = false;
+    },
+
+    [follow.pending]: (state, action) => {
+      state.loading = true;
+    },
+    [unfollow.rejected]: (state, action) => {
+      state.loading = false;
+      state.errMessage = action.payload.errMessage;
+    },
+    [unfollow.fulfilled]: (state, action) => {
+      state.user = action.payload.user;
+      localStorage.setItem("user", JSON.stringify(action.payload.user));
+      state.userId = action.payload.user._id;
+      state.loading = false;
+    },
+
+    [unfollow.pending]: (state, action) => {
       state.loading = true;
     },
 

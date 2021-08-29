@@ -1,11 +1,15 @@
 import styled from "styled-components";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Avatar, BottomButtons, FlexBox, PostsGrid } from "../components";
 import { useSelector } from "react-redux";
 import { fetchUserPosts } from "../features/post/PostSlice";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router";
-import { fetchParticularUser } from "../features/user/UserSlice";
+import {
+  fetchParticularUser,
+  follow,
+  unfollow,
+} from "../features/user/UserSlice";
 import useWindowDimensions from "../custom-hooks/useWindowDimensions";
 import DesktopButtons from "../components/DesktopButtons";
 import { defaultCoverPicture, defaultProfilePicture } from "../utils/utils";
@@ -22,10 +26,11 @@ const Profile = () => {
   useEffect(() => {
     dispatch(fetchParticularUser(userId));
   }, []);
-  const { fetchedUser, loading, errMessage } = useSelector(
+  const { fetchedUser, loading, errMessage, user } = useSelector(
     (state) => state.user
   );
   const postState = useSelector((state) => state.post);
+  let index;
 
   useEffect(() => {
     dispatch(fetchUserPosts());
@@ -34,6 +39,12 @@ const Profile = () => {
   const signOutUser = () => {
     dispatch(logoutUser());
   };
+
+  index = user?.followings?.findIndex(
+    (following) => following === fetchedUser?._id
+  );
+
+  console.log(user.followings);
 
   return (
     <div>
@@ -119,12 +130,36 @@ const Profile = () => {
       </ProfileInfoWrapper>
       <ProfileWrapper>
         <h3 style={{ marginTop: "4rem" }}>{fetchedUser.name}</h3>
-        {/* <FlexBox>
+        {fetchedUser._id !== user._id &&
+          (index === -1 ? (
+            <StyledButton
+              style={{ marginBottom: "1rem" }}
+              primary
+              onClick={() =>
+                dispatch(follow({ userIdToFollow: fetchedUser._id }))
+              }
+            >
+              Follow
+            </StyledButton>
+          ) : (
+            <StyledButton
+              style={{ marginBottom: "1rem" }}
+              onClick={() =>
+                dispatch(unfollow({ userIdToUnfollow: fetchedUser._id }))
+              }
+            >
+              Unfollow
+            </StyledButton>
+          ))}
+        <FlexBox
+          justifyContent="space-between"
+          alignItems="center"
+          style={{ width: "50%", margin: "auto" }}
+        >
           <FlexBox
             flexDirection="column"
             alignItems="center"
             justifyContent="flex-start"
-            style={{ width: "50%" }}
           >
             <FollowHeading>Followers</FollowHeading>
             <p>{fetchedUser?.followers?.length}</p>
@@ -133,14 +168,14 @@ const Profile = () => {
             flexDirection="column"
             alignItems="center"
             justifyContent="flex-start"
-            style={{ width: "50%" }}
           >
             <FollowHeading>Following</FollowHeading>
             <p>{fetchedUser?.followings?.length}</p>
           </FlexBox>
-        </FlexBox> */}
+        </FlexBox>
         <p>{fetchedUser.bio}</p>
-        <div style={{ marginTop: "2rem" }}>
+
+        <div style={{ marginTop: "1rem" }}>
           <h2 style={{ textAlign: "left" }}>Feed</h2>
           <PostsGrid postsType="User" />
           {postState.feed.length === 0 && <h1>0 Posts</h1>}

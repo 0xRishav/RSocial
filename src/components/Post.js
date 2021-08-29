@@ -115,7 +115,7 @@ const Post = ({
             flexDirection="row"
             justifyContent="space-between"
             alignItems="center"
-            style={{ width: "15%" }}
+            style={{ width: "27%" }}
           >
             <ReactiontItemWrapper>
               <LikeCommentDiv
@@ -155,9 +155,7 @@ const Post = ({
             <ReactiontItemWrapper></ReactiontItemWrapper>
           </FlexBox>
 
-          {false && (
-            <AiOutlineDelete size={20} />
-          )}
+          {false && <AiOutlineDelete size={20} />}
         </ReactiontWrapper>
       )}
     </div>

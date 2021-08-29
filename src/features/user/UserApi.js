@@ -52,6 +52,12 @@ export const userApi = {
   fetchParticularUser: async (userId) => {
     return await axios.post(`${baseUrl}/fetch-particular-user/${userId}`);
   },
+  follow: async (body) => {
+    return await axios.post(`${baseUrl}/follow`, body);
+  },
+  unfollow: async (body) => {
+    return await axios.post(`${baseUrl}/unfollow`, body);
+  },
   fetchAllUsers: async () => {
     return await axios.get(`${baseUrl}/fetch-all-users`);
   },
