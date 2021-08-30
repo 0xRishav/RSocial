@@ -12,12 +12,13 @@ import {
 } from "../features/user/UserSlice";
 import useWindowDimensions from "../custom-hooks/useWindowDimensions";
 import DesktopButtons from "../components/DesktopButtons";
-import { defaultCoverPicture, defaultProfilePicture } from "../utils/utils";
+import { defaultCoverPicture, defaultProfilePicture, loaderOptions } from "../utils/utils";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import { StyledButton } from "../components/Button";
 import { logoutUser } from "../features/user/UserSlice";
 import ErrorBox from "../components/Error";
+import Loader from "react-loader";
 
 const Profile = () => {
   const { width } = useWindowDimensions();
@@ -49,6 +50,7 @@ const Profile = () => {
 
   return (
     <div>
+      {<Loader loaded={!loading} options={loaderOptions} />}
       {errMessage && <ErrorBox message={errMessage} delay="5000" />}
       <ProfileInfoWrapper>
         <LazyLoadImage
@@ -168,7 +170,7 @@ const Profile = () => {
 
         <div style={{ marginTop: "1rem" }}>
           <h2 style={{ textAlign: "left" }}>Feed</h2>
-          <PostsGrid postsType="User" userPosts={fetchedUser.posts}/>
+          <PostsGrid postsType="User" userPosts={fetchedUser.posts} />
           {postState.feed.length === 0 && <h1>0 Posts</h1>}
         </div>
       </ProfileWrapper>

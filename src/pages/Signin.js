@@ -10,7 +10,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import Loader from "react-loader";
 import { loaderOptions } from "../utils/utils";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import ErrorBox from "../components/Error";
 
@@ -19,11 +18,11 @@ const Signin = () => {
     emailOrUsername: "",
     password: "",
   });
-  const { user, errMessage } = useSelector((state) => state.user);
-  const [isFormEmpty, setIsFormEmpty] = useState(true);
+  const { user, loading, errMessage } = useSelector((state) => state.user);
+  const [isFormEmpty, setIsFormEmpty] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   console.log(AuthPageSvg);
 
   console.log("errMessage", errMessage);
@@ -44,7 +43,7 @@ const Signin = () => {
   };
 
   const handleSubmit = async (e) => {
-    setLoading(true);
+    // setLoading(true);
     e.preventDefault();
     for (const key in formData) {
       if (formData[key] === "") {
@@ -67,10 +66,10 @@ const Signin = () => {
 
     const response = await dispatch(signinUser(body));
     if (response.meta.requestStatus === "fulfilled") {
-      setLoading(false);
+      // setLoading(false);
       history.push("/");
     }
-    setLoading(false);
+    // setLoading(false);
   };
 
   return (
@@ -82,12 +81,6 @@ const Signin = () => {
       </NavDiv>
       <h2>Welcome back to RSocial</h2>
       <SignInWrapper>
-        <LazyLoadImage
-          effect="blur"
-          src={AuthPageSvg}
-          alt="handPic"
-          style={{ width: "80%", height: "auto" }}
-        />
         <Input
           onChange={(e) => handleInputChange(e)}
           placeholder="Username/Email"
@@ -100,6 +93,11 @@ const Signin = () => {
           type="password"
           name="password"
         />
+        {isFormEmpty && (
+          <div style={{ color: "red", fontWeight: "700" }}>
+            All input feilds are required
+          </div>
+        )}
         <StyledButton
           onClick={(e) => handleSubmit(e)}
           primary
@@ -109,12 +107,10 @@ const Signin = () => {
         </StyledButton>
         <StyledButton
           onClick={() => {
-            dispatch(
-              signinUser({ email: "rshvbharti@gmail.com", password: "123456" })
-            );
+            dispatch(signinUser({ username: "demo", password: 123456 }));
           }}
           primary
-          style={{ width: "100%" }}
+          style={{ width: "100%", marginTop: "0.5rem" }}
         >
           Use Demo Account
         </StyledButton>

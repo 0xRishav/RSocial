@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Suspense } from "react";
 import logo from "./logo.svg";
 import { Counter } from "./features/counter/Counter";
 import "./App.css";
@@ -12,21 +12,31 @@ import {
 import { PrivateRoute } from "./features/user/privateRouter";
 import { setUserFromLocalStorage } from "./features/user/UserSlice";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  Landing,
-  Signin,
-  Signup,
-  UploadPhoto,
-  Feed,
-  PostPage,
-  Search,
-  CreatePost,
-  Notifications,
-  Profile,
-  Explore,
-} from "./pages";
+// import {
+//   Landing,
+//   Signin,
+//   Signup,
+//   UploadPhoto,
+//   Feed,
+//   PostPage,
+//   Search,
+//   CreatePost,
+//   Profile,
+//   Explore,
+// } from "./pages";
 import styled, { Theam } from "styled-components";
 import StoryPage from "./features/story/StoryPage";
+
+const Landing = React.lazy(() => import("./pages/Landing"));
+const Signin = React.lazy(() => import("./pages/Signin"));
+const Signup = React.lazy(() => import("./pages/Signup"));
+const UploadPhoto = React.lazy(() => import("./pages/UploadPhoto"));
+const Feed = React.lazy(() => import("./pages/Feed"));
+const PostPage = React.lazy(() => import("./pages/PostPage"));
+const Search = React.lazy(() => import("./pages/Search"));
+const CreatePost = React.lazy(() => import("./pages/CreatePost"));
+const Profile = React.lazy(() => import("./pages/Profile"));
+const Explore = React.lazy(() => import("./pages/Explore"));
 
 function App() {
   const dispatch = useDispatch();
@@ -37,38 +47,39 @@ function App() {
 
   return (
     <div className="App">
-      <Switch>
-        <PrivateRoute exact path="/profile/:userId" component={Profile} />
-        <PrivateRoute exact path="/post-page/:postId" component={PostPage} />
-        <Route exact path="/">
-          {accessToken ? <Redirect to="/feed" /> : <Landing />}
-        </Route>
-        <AppWrapper>
-          <Route exact path="/signup">
-            {accessToken ? <Redirect to="/feed" /> : <Signup />}
+      <Suspense fallback={<div>Loading...</div>}>
+        <Switch>
+          <PrivateRoute exact path="/profile/:userId" component={Profile} />
+          <PrivateRoute exact path="/post-page/:postId" component={PostPage} />
+          <Route exact path="/">
+            {accessToken ? <Redirect to="/feed" /> : <Landing />}
           </Route>
-          <Route exact path="/signin">
-            {accessToken ? <Redirect to="/feed" /> : <Signin />}
-          </Route>
+          <AppWrapper>
+            <Route exact path="/signup">
+              {accessToken ? <Redirect to="/feed" /> : <Signup />}
+            </Route>
+            <Route exact path="/signin">
+              {accessToken ? <Redirect to="/feed" /> : <Signin />}
+            </Route>
 
-          <PrivateRoute exact path="/feed" component={Feed} />
-          <PrivateRoute exact path="/search" component={Search} />
-          <PrivateRoute exact path="/create-post" component={CreatePost} />
-          <PrivateRoute exact path="/explore" component={Explore} />
-          <PrivateRoute exact path="/notifications" component={Notifications} />
-          <PrivateRoute exact path="/create-story" component={StoryPage} />
+            <PrivateRoute exact path="/feed" component={Feed} />
+            <PrivateRoute exact path="/search" component={Search} />
+            <PrivateRoute exact path="/create-post" component={CreatePost} />
+            <PrivateRoute exact path="/explore" component={Explore} />
+            <PrivateRoute exact path="/create-story" component={StoryPage} />
 
-          <Route path="/upload-photo/profile">
-            <UploadPhoto photoType="Profile" />
-          </Route>
-          <Route path="/upload-photo/cover">
-            <UploadPhoto photoType="Cover" />
-          </Route>
-          <Route path="/upload-photo/story">
-            <UploadPhoto photoType="Story" />
-          </Route>
-        </AppWrapper>
-      </Switch>
+            <Route path="/upload-photo/profile">
+              <UploadPhoto photoType="Profile" />
+            </Route>
+            <Route path="/upload-photo/cover">
+              <UploadPhoto photoType="Cover" />
+            </Route>
+            <Route path="/upload-photo/story">
+              <UploadPhoto photoType="Story" />
+            </Route>
+          </AppWrapper>
+        </Switch>
+      </Suspense>
     </div>
   );
 }
