@@ -9,23 +9,13 @@ import {
   Link,
   Redirect,
 } from "react-router-dom";
+import Loader from "react-loader";
 import { PrivateRoute } from "./features/user/privateRouter";
 import { setUserFromLocalStorage } from "./features/user/UserSlice";
 import { useSelector, useDispatch } from "react-redux";
-// import {
-//   Landing,
-//   Signin,
-//   Signup,
-//   UploadPhoto,
-//   Feed,
-//   PostPage,
-//   Search,
-//   CreatePost,
-//   Profile,
-//   Explore,
-// } from "./pages";
 import styled, { Theam } from "styled-components";
 import StoryPage from "./features/story/StoryPage";
+import { loaderOptions } from "./utils/utils";
 
 const Landing = React.lazy(() => import("./pages/Landing"));
 const Signin = React.lazy(() => import("./pages/Signin"));
@@ -47,7 +37,7 @@ function App() {
 
   return (
     <div className="App">
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loader options={loaderOptions} />}>
         <Switch>
           <PrivateRoute exact path="/profile/:userId" component={Profile} />
           <PrivateRoute exact path="/post-page/:postId" component={PostPage} />

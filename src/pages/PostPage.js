@@ -141,7 +141,7 @@ const CommentsWrapper = styled.div`
   width: 100%;
   margin-top: auto;
   padding: 5%;
-  margin-bottom: 2rem;
+  margin-bottom: 4rem;
   @media (min-width: 725px) {
     width: 60%;
   }

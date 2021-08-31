@@ -10,9 +10,10 @@ import { createStory, fetchAllStories } from "./StorySlice";
 import { Link } from "react-router-dom";
 import Modal from "react-modal";
 import React from "react";
-import { defaultProfilePicture } from "../../utils/utils";
+import { defaultProfilePicture, loaderOptions } from "../../utils/utils";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
+import Loader from "react-loader";
 
 const Story = () => {
   const storyState = useSelector((state) => state.story);
@@ -166,6 +167,7 @@ const Story = () => {
               alt="story"
               effect="blur"
               style={{ objectFit: "cover", height: "70vh", width: "100%" }}
+              placeholder={<Loader options={loaderOptions} />}
             />
           </FlexBox>
         </div>
