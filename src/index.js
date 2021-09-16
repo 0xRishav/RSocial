@@ -5,13 +5,23 @@ import App from "./App";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
 import * as serviceWorker from "./serviceWorker";
-import "./fonts/Gilroy-Light.otf";
+import { BrowserRouter as Router } from "react-router-dom";
+import "./fonts/Gilroy-Bold.ttf";
+import "./fonts/Gilroy-ExtraBold.ttf";
+import "./fonts/Gilroy-Heavy.ttf";
+import "./fonts/Gilroy-Light.ttf";
+import "./fonts/Gilroy-Medium.ttf";
+import "./fonts/Gilroy-Regular.ttf";
+import "./fonts/Gilroy-SemiBold.ttf";
+import "./fonts/Gilroy-Thin.ttf";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <Router>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </Router>
   </React.StrictMode>,
   document.getElementById("root")
 );
