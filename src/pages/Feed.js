@@ -30,9 +30,12 @@ const Feed = () => {
       )}
 
       <Story />
-      {feed.map((post, index) => (
-        <Post key={index} {...post} user={post.user} />
-      ))}
+      {feed
+        .slice(0)
+        .reverse()
+        .map((post, index) => (
+          <Post key={index} {...post} user={post.user} />
+        ))}
       <div style={{ marginBottom: "5rem" }} />
       {width < 725 && <BottomButtons />}
     </div>

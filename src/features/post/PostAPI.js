@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "https://rsocial-api.herokuapp.com/post";
+const baseUrl = "https://RSocial-API.rishavbharti1.repl.co/post";
 // const baseUrl = "http://localhost:4000/post";
 
 export const postApi = {
