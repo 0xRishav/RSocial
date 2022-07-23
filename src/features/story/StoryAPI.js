@@ -1,7 +1,7 @@
 // all-stories
 import axios from "axios";
 
-const baseUrl = "https://RSocial-API.shubham1121.repl.co/story";
+const baseUrl = "https://RSocial-API.rishavbharti1.repl.co/story";
 // const baseUrl = "http://localhost:4000/story";
 export const storyApi = {
   fetchAllStories: async () => {

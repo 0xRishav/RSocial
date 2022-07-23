@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = "https://RSocial-API.shubham1121.repl.co/user";
+const baseUrl = "https://RSocial-API.rishavbharti1.repl.co/user";
 // const baseUrl = "http://localhost:4000/user";
 
 axios.interceptors.request.use(
