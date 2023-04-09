@@ -22,7 +22,7 @@ const PostsGrid = ({ postsType, userPosts }) => {
               <Link to={`/post-page/${image._id}`} key={image._id}>
                 <Post key={i}>
                   <PostImageFigure>
-                    <div>
+                    <div style={{height: "100%", width: "100%"}}>
                       <img
                         src={image.photoUrl}
                         alt="postPic"
@@ -94,6 +94,8 @@ const Post = styled.a`
   cursor: pointer;
   position: relative;
   display: block;
+  height: 100%;
+  width: 100%;
   &:hover ${PostOverlay} {
     display: flex;
   }
@@ -101,6 +103,8 @@ const Post = styled.a`
 
 const PostImageFigure = styled.figure`
   margin: 0;
+  height: 100%;
+  width: 100%;
 `;
 const PostImage = styled.img`
   width: 100%;
