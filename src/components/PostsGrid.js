@@ -67,7 +67,7 @@ const PostsGrid = ({ postsType, userPosts }) => {
 
 const PostList = styled.section`
   display: grid;
-  grid-template-columns: repeat(2, minmax(100px, 293px));
+  grid-template-columns: repeat(3, minmax(100px, 293px));
   justify-content: center;
   grid-gap: 28px;
   margin-bottom: 6rem;
