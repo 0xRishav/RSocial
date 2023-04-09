@@ -22,18 +22,17 @@ const PostsGrid = ({ postsType, userPosts }) => {
               <Link to={`/post-page/${image._id}`} key={image._id}>
                 <Post key={i}>
                   <PostImageFigure>
-                    <div 
-                      style={{
-                        verticalAlign: "top",
-                        objectFit: "cover",
-                        height: "100%",
-                        minHeight: "100px",
-                        width: "100%",
-                      }}
-                    >
+                    <div>
                       <img
                         src={image.photoUrl}
                         alt="postPic"
+                        style={{
+                          verticalAlign: "top",
+                          objectFit: "cover",
+                          height: "100%",
+                          minHeight: "100px",
+                          width: "100%",
+                        }}
                       />
                     </div>
                   </PostImageFigure>

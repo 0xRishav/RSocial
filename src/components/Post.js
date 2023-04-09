@@ -67,19 +67,18 @@ const Post = ({
       </NameOptionWrapper>
 
       {photoUrl && (
-        <div 
-          style={{
-            objectFit: "cover",
-            marginTop: "1rem",
-            borderRadius: "0.8rem",
-            width: "100%",
-            height: "auto",
-            // boxShadow: "rgba(17, 12, 46, 0.15) 0px 48px 100px 0px",
-            boxShadow: "rgba(0, 0, 0, 0.30) 0px 22px 70px 4px",
-          }}
-        >
+        <div>
           <img
             src={photoUrl}
+            style={{
+              objectFit: "cover",
+              marginTop: "1rem",
+              borderRadius: "0.8rem",
+              width: "100%",
+              height: "auto",
+              // boxShadow: "rgba(17, 12, 46, 0.15) 0px 48px 100px 0px",
+              boxShadow: "rgba(0, 0, 0, 0.30) 0px 22px 70px 4px",
+            }}
           />
         </div>
       )}
