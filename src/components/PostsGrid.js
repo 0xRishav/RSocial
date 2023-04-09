@@ -22,10 +22,7 @@ const PostsGrid = ({ postsType, userPosts }) => {
               <Link to={`/post-page/${image._id}`} key={image._id}>
                 <Post key={i}>
                   <PostImageFigure>
-                    <LazyLoadImage
-                      src={image.photoUrl}
-                      alt="postPic"
-                      effect="blur"
+                    <div 
                       style={{
                         verticalAlign: "top",
                         objectFit: "cover",
@@ -33,7 +30,12 @@ const PostsGrid = ({ postsType, userPosts }) => {
                         minHeight: "100px",
                         width: "100%",
                       }}
-                    />
+                    >
+                      <img
+                        src={image.photoUrl}
+                        alt="postPic"
+                      />
+                    </div>
                   </PostImageFigure>
                   <PostOverlay>
                     <p>
